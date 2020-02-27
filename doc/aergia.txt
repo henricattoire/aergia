@@ -1,0 +1,27 @@
+*aergia*  *aergia.txt*  snippet manager: v0.1
+
+Author:  Henri Cattoire
+
+1. Variables    |aergia-variables|
+
+===============================================================================
+VARIABLES                                                    *aegria-variables*
+
+-------------------------------------------------------------------------------
+                                                          *'g:aergia_snippets'*
+Default: $HOME . '/.vim/bundle/aergia/snippets'
+
+Location where aergia looks for snippets. You can change it in your `vimrc`.
+>
+    let g:aergia_snippets = '/path'
+<
+
+-------------------------------------------------------------------------------
+                                                               *'g:aergia_key'*
+Default: '<c-a>'
+
+Specified the key used to trigger aegria. Setting this to <tab> can cause 
+unexpected behaviour. You can change it in your `vimrc`.
+>
+    let g:aergia_key = '<c-j>'
+<
