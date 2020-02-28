@@ -27,7 +27,7 @@ python_def
 ```
 
 Filetype aware snippets are snippets that only work in files of the given filetype. In the example, 
-a ```def``` snippet is created for python files (syntax: filetype_key or filetype-key). Filetype aware 
+a ```def``` snippet is created for python files (syntax: `filetype_name` or `filetype-name`). Filetype aware 
 snippets have a priority over normal snippets.
 
 * example of a snippet file
