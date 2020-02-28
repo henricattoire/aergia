@@ -10,8 +10,7 @@ if !exists('g:aergia_key')
   let g:aergia_key = '<c-a>'
 endif
 
-" cannot be defined by user
-let g:aergia_tag = '{+}'
+let s:aergia_tag = '{+}'
 " }}}
 " Aergia {{{
   " TriggerAergia: find the location of the snippet file if it exists {{{
@@ -36,11 +35,18 @@ function! Aergia()
   let l:snippet_file = TriggerAergia()
   if l:snippet_file !=# "file not found" 
     execute "normal! b" . '"_dw'
-    execute "r " . l:snippet_file
-    execute "normal! k" . '"_dd'
+    let l:cursor = getpos('.')
     " keep indendation of file in mind
-    let l:sf_number_of_lines = len(readfile(l:snippet_file)) - 1
-    execute "normal! =" . l:sf_number_of_lines . "j"
+    let l:indent_level = indent(line('.'))
+    let l:indent = ""
+    while l:indent_level > 0
+      let l:indent = l:indent . " "
+      let l:indent_level -= 1
+    endwhile
+    " use sed to prefix the snippet with the correct indentation
+    execute "r !cat " . l:snippet_file . "| sed 's/^/" . l:indent . "/g'"
+    call setpos('.', l:cursor)
+    execute "normal! " . '"_dd'
     call SelectTag()
   else
     call SelectTag()
@@ -49,15 +55,20 @@ endfunction
   " }}}
   " SelectTag: select the next tag in the snippet {{{
 function! SelectTag()
-  let l:tag_pattern = '\V' .  g:aergia_tag
+  let l:tag_pattern = '\V' .  s:aergia_tag
   try 
     execute "normal! /" .  l:tag_pattern . "\<cr>"
+    let l:append = 0
+    " set append to true if the tag is the last set of chars
+    if getline('.') =~ '^.*{+}$'
+      let l:append = 1
+    endif
     execute "normal! df}"
     " append in imode on `empty` lines (do not move cursor one column back)
-    if getline('.') =~ '^\s*$'
-      execute "startinsert!"
-    else
+    if l:append == 0
       execute "startinsert"
+    else
+      execute "startinsert!"
     endif
   catch /E486.*/
   endtry
