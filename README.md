@@ -33,8 +33,8 @@ snippets have a priority over normal snippets.
 * example of a snippet file
 ```
 def {+}():
-  {+}
+    {+}
 ```
 
-Snippet files can contains tags (`{+}`) and it is possible to jump from tag to tag using the same key
+Snippet files can contains tags `{+}` and it is possible to jump from tag to tag using the same key
 to invoke a snippet.
