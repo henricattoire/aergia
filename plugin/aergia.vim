@@ -35,12 +35,12 @@ endfunction
 function! Aergia()
   let l:snippet_file = TriggerAergia()
   if l:snippet_file !=# "file not found" 
-    execute "normal! bdw"
-    let l:start_position = getpos('.')
-    let l:contents = readfile(l:snippet_file)
-    execute "normal! i" . join(l:contents, "\n")
-    call setpos('.', l:start_position)
-    " move to the first tag
+    execute "normal! b" . '"_dw'
+    execute "r " . l:snippet_file
+    execute "normal! k" . '"_dd'
+    " keep indendation of file in mind
+    let l:sf_number_of_lines = len(readfile(l:snippet_file)) - 1
+    execute "normal! =" . l:sf_number_of_lines . "j"
     call SelectTag()
   else
     call SelectTag()
@@ -53,7 +53,12 @@ function! SelectTag()
   try 
     execute "normal! /" .  l:tag_pattern . "\<cr>"
     execute "normal! df}"
-    execute "startinsert"
+    " append in imode on `empty` lines (do not move cursor one column back)
+    if getline('.') =~ '^\s*$'
+      execute "startinsert!"
+    else
+      execute "startinsert"
+    endif
   catch /E486.*/
   endtry
 endfunction
