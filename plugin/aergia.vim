@@ -12,25 +12,25 @@ endif
 
 let s:aergia_tag = '{+}'
 " }}}
-" Aergia {{{
-  " TriggerAergia: find the location of the snippet file if it exists {{{
+" Functions {{{
+  " TriggerAergia: find the path of the snippet file {{{
 function! TriggerAergia()
   let l:key = expand('<cword>')
   " set global snippet file
   let l:snippet_file = globpath(g:aergia_snippets, '**/' . l:key)
   " overwrite with filetype specific snippet file if it exists
-  if globpath(g:aergia_snippets, '**/' . &filetype . '*' . l:key) !=# ''
+  if globpath(g:aergia_snippets, '**/' . &filetype . '?' . l:key) !=# ''
     let l:snippet_file = globpath(g:aergia_snippets, '**/' . &filetype . '*' . l:key)
   endif
 
-  if l:snippet_file !=# ''
+  if l:snippet_file !=# '' && l:key !=# ''
     return l:snippet_file
   else
     return "file not found"
   endif
 endfunction
   " }}}
-  " Aergia: replace key with corresponding snippet {{{
+  " Aergia: replace name with corresponding snippet {{{
 function! Aergia()
   let l:snippet_file = TriggerAergia()
   if l:snippet_file !=# "file not found" 
@@ -71,11 +71,12 @@ function! SelectTag()
       execute "startinsert!"
     endif
   catch /E486.*/
+    echom "AegriaError: found no tag/snippet"
   endtry
 endfunction
   " }}}
 " }}}
-" Plugin mappings {{{
+" Mappings {{{
 inoremap <silent> <Plug>(aergia) <esc>:call Aergia()<cr>
 execute "imap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
