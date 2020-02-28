@@ -20,8 +20,9 @@ Location where aergia looks for snippets. You can change it in your `vimrc`.
                                                                *'g:aergia_key'*
 Default: '<c-a>'
 
-Specified the key used to trigger aegria. Setting this to <tab> can cause 
-unexpected behaviour. You can change it in your `vimrc`.
+Specified the key used to trigger aegria. Setting this to <tab> when you have
+other plugins like supertab installed, can cause unexpected behaviour. You can
+change it in your `vimrc`.
 >
     let g:aergia_key = '<c-j>'
 <
