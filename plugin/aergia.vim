@@ -1,4 +1,4 @@
-" aergia (v.0.1): small plugin that tries to act as a snippet manager.
+" aergia (v.0.2): small plugin that tries to act as a snippet manager.
 " author: Henri Cattoire.
 
 " Variables {{{
@@ -10,7 +10,12 @@ if !exists('g:aergia_key')
   let g:aergia_key = '<c-a>'
 endif
 
-let s:aergia_tag = '{+}'
+" tag start and end
+let s:aergia_start_tag = '{'
+let s:aergia_end_tag = '}'
+" last named tag properties
+let s:aergia_named_tag = ''
+let s:aergia_named_tag_pos = [0, 0, 0]
 " }}}
 " Functions {{{
   " TriggerAergia: find the path of the snippet file {{{
@@ -30,8 +35,8 @@ function! TriggerAergia()
   endif
 endfunction
   " }}}
-  " Aergia: replace name with corresponding snippet {{{
-function! Aergia()
+  " ExecuteAergia: replace name with corresponding snippet {{{
+function! ExecuteAergia()
   let l:snippet_file = TriggerAergia()
   if l:snippet_file !=# "file not found" 
     execute "normal! b" . '"_dw'
@@ -55,12 +60,25 @@ endfunction
   " }}}
   " SelectTag: select the next tag in the snippet {{{
 function! SelectTag()
-  let l:tag_pattern = '\V' .  s:aergia_tag
+  if s:aergia_named_tag !=# ''
+    let l:cpos = getpos('.')
+    call setpos('.', s:aergia_named_tag_pos)
+    execute "%s/{" . s:aergia_named_tag . "}/" . expand('<cword>') . "/g"
+    call setpos('.', l:cpos)
+    " remove named tag
+    let s:aergia_named_tag = ''
+  endif
+  let l:tag_pattern = s:aergia_start_tag . ".\\+" . s:aergia_end_tag
   try 
-    execute "normal! /" .  l:tag_pattern . "\<cr>"
+    execute "normal! /" . l:tag_pattern . "\<cr>"
+    " if current tag is a named tag, store it
+    if expand('<cWORD>') =~ '[A-Za-z]\+'
+      let s:aergia_named_tag = expand('<cword>')
+      let s:aergia_named_tag_pos = getpos('.')
+    endif
     let l:append = 0
     " set append to true if the tag is the last set of chars
-    if getline('.') =~ '^[^{+}]*{+}$'
+    if getline('.') =~ '^[^{+}]*{.\+}$'
       let l:append = 1
     endif
     execute "normal! df}"
@@ -77,6 +95,6 @@ endfunction
   " }}}
 " }}}
 " Mappings {{{
-inoremap <silent> <Plug>(aergia) <esc>:call Aergia()<cr>
+inoremap <silent> <Plug>(aergia) <esc>:call ExecuteAergia()<cr>
 execute "imap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
