@@ -38,3 +38,13 @@ def {+}():
 
 Snippet files can contains tags `{+}` and it is possible to jump from tag to tag using the same key
 to invoke a snippet.
+
+* named tags
+```
+def {name}():
+    """ {name}: {+} """
+    {+}
+```
+
+Snippet files can also contain named tags. When you set the value for one tag, `aergia` will automatically change
+all other tags with the same name.
