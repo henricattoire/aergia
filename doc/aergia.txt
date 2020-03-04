@@ -1,8 +1,9 @@
-*aergia*  *aergia.txt*  snippet manager: v0.1
+*aergia*  *aergia.txt*  snippet manager: v0.2
 
 Author:  Henri Cattoire
 
 1. Variables    |aergia-variables|
+2. Snippets     |aergia-snippets|
 
 ===============================================================================
 VARIABLES                                                    *aegria-variables*
@@ -25,4 +26,31 @@ other plugins like supertab installed, can cause unexpected behaviour. You can
 change it in your `vimrc`.
 >
     let g:aergia_key = '<c-j>'
+<
+
+===============================================================================
+SNIPPETS                                                      *aegria-snippets*
+
+-------------------------------------------------------------------------------
+                                                             *'snippet_format'*
+Each snippet has its own file. The text used to invoke the snippet is the same
+as the filename. Snippets can (but don't have to) contain tags and you can jump
+between tags using the same key to invoke a snippet.
+
+-------------------------------------------------------------------------------
+                                                               *'snippet_tags'*
+Tags are points in your snippet where you can put some text. In aergia, normal
+tags just have a `+` between the start and the end of the tag.
+>
+    {+}
+<
+
+-------------------------------------------------------------------------------
+                                                         *'snippet_named_tags'*
+Named tags are tags that occur more than once in your snippet. When you have 
+set a value for one of these tags, aergia will automatically replace all other
+tags with that name for you. Only tags containing letters (a-z,A-Z) will be 
+recognised as named tags.
+>
+    {name}
 <
