@@ -32,7 +32,7 @@ Key used to trigger `aergia`. Setting this to `<tab>` when you have other plugin
 let g:aergia_snippets = expand('~/snippets')
 ```
 
-It is possible to structure this directory to your liking because aegria also searches
+It is possible to structure this directory to your liking because `aegria` also searches
 its subdirectories when looking for snippets.
 
 
