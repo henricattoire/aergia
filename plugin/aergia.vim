@@ -4,6 +4,8 @@
 " Variables {{{
 if !exists('g:aergia_snippets') 
   let g:aergia_snippets = expand('~/.vim/bundle/aergia/snippets')
+else
+  let g:aergia_snippets = expand(g:aergia_snippets)
 endif
 
 if !exists('g:aergia_key')
