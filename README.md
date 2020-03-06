@@ -2,6 +2,8 @@
 
 aergia is a small plugin that helps you manage snippets.
 
+![demo](https://github.com/henricattoire/media/blob/master/aergia/demo.gif)
+
 ### installation
 
 #### [pathogen](https://github.com/tpope/vim-pathogen):
