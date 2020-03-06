@@ -2,10 +2,6 @@
 
 aergia is a small plugin that helps you manage snippets.
 
-1. [installation](#installation)
-2. [configuration](#configuration)
-3. [snippets](#snippets)
-
 ### installation
 
 #### [pathogen](https://github.com/tpope/vim-pathogen):
@@ -19,7 +15,7 @@ Or use your favorite package manager to install `aergia`.
 
 ### configuration
 
-* trigger (default: `<c-a>`)
+* key (default: `<c-a>`)
 ```vim
 let g:aergia_key = '<tab>'
 ```
@@ -29,7 +25,7 @@ Key used to trigger `aergia`. Setting this to `<tab>` when you have other plugin
 
 * snippets (default: `~/.vim/bundle/aergia/snippets`)
 ```vim
-let g:aergia_snippets = expand('~/snippets')
+let g:aergia_snippets = '~/snippets'
 ```
 
 It is possible to structure this directory to your liking because `aegria` also searches
@@ -45,7 +41,8 @@ def {+}():
 ```
 
 Snippet files can contains tags `{+}` and it is possible to jump from tag to tag using the same key
-to invoke a snippet.
+to invoke a snippet. Putting this snippet in a file called `def` will allow you to use the snippet
+by typing `def` [key](#configuration) in insert mode.
 
 * named tags
 ```
@@ -63,5 +60,5 @@ python_def
 ```
 
 Filetype aware snippets are snippets that only work in files of the given filetype. In the example, 
-a ```def``` snippet is created for python files (syntax: `filetype_name` or `filetype-name`). Filetype aware 
+a `def` snippet is created for python files (syntax: `filetype_name` or `filetype-name`). Filetype aware 
 snippets have a priority over normal snippets.
