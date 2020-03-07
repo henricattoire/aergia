@@ -80,7 +80,7 @@ function! SelectTag()
     endif
     let l:append = 0
     " set append to true if the tag is the last set of chars
-    if getline('.') =~ '^[^{+}]*{.\+}$'
+    if getline('.') =~ '^[^{+}]*{[^}{]\+}$'
       let l:append = 1
     endif
     execute "normal! df}"
