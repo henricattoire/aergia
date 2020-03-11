@@ -74,7 +74,7 @@ function! SelectTag()
   try 
     execute "normal! /" . l:tag_pattern . "\<cr>"
     " if current tag is a named tag, store it
-    if expand('<cWORD>') =~ '[A-Za-z]\+'
+    if expand('<cWORD>') =~ '[{][A-Za-z]\+[}]'
       let s:aergia_named_tag = expand('<cword>')
       let s:aergia_named_tag_pos = getpos('.')
     endif
