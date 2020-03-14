@@ -20,14 +20,15 @@ let s:aergia_named_tag = ''
 let s:aergia_named_tag_pos = [0, 0, 0]
 " }}}
 " Functions {{{
-  " TriggerAergia: find the path of the snippet file {{{
-function! TriggerAergia()
+  " Main {{{
+    " FindSnippet: find the path of the snippet file {{{
+function! FindSnippet()
   let l:key = expand('<cword>')
   " set global snippet file
   let l:snippet_file = globpath(g:aergia_snippets, '**/' . l:key)
   " overwrite with filetype specific snippet file if it exists
-  if globpath(g:aergia_snippets, '**/' . &filetype . '?' . l:key) !=# ''
-    let l:snippet_file = globpath(g:aergia_snippets, '**/' . &filetype . '*' . l:key)
+  if globpath(g:aergia_snippets, '**/' . &filetype . '[_-]' . l:key) !=# ''
+    let l:snippet_file = globpath(g:aergia_snippets, '**/' . &filetype . '[-_]' . l:key)
   endif
 
   if l:snippet_file !=# '' && l:key !=# ''
@@ -37,9 +38,9 @@ function! TriggerAergia()
   endif
 endfunction
   " }}}
-  " ExecuteAergia: replace name with corresponding snippet {{{
-function! ExecuteAergia()
-  let l:snippet_file = TriggerAergia()
+  " ReplSnippet: replace the word under the cursor with the snippet {{{
+function! ReplSnippet()
+  let l:snippet_file = FindSnippet()
   if l:snippet_file !=# "file not found" 
     execute "normal! b" . '"_dw'
     let l:cursor = getpos('.')
@@ -54,22 +55,17 @@ function! ExecuteAergia()
     execute "r !cat " . l:snippet_file . "| sed 's/^/" . l:indent . "/g'"
     call setpos('.', l:cursor)
     execute "normal! " . '"_dd'
-    call SelectTag()
+    call NextTag()
   else
-    call SelectTag()
+    call NextTag()
   endif
 endfunction
   " }}}
-  " SelectTag: select the next tag in the snippet {{{
-function! SelectTag()
-  if s:aergia_named_tag !=# ''
-    let l:cpos = getpos('.')
-    call setpos('.', s:aergia_named_tag_pos)
-    execute "%s/{" . s:aergia_named_tag . "}/" . expand('<cword>') . "/g"
-    call setpos('.', l:cpos)
-    " remove named tag
-    let s:aergia_named_tag = ''
-  endif
+  " }}}
+  " Tags {{{
+    " NextTag: select the next tag in the snippet {{{
+function! NextTag()
+  call ReplNamedTag()
   let l:tag_pattern = s:aergia_start_tag . ".\\+" . s:aergia_end_tag
   try 
     execute "normal! /" . l:tag_pattern . "\<cr>"
@@ -95,8 +91,21 @@ function! SelectTag()
   endtry
 endfunction
   " }}}
+    " ReplNamedTag: replace the current named tag (if any) {{{
+function! ReplNamedTag()
+  if s:aergia_named_tag !=# ''
+    let l:cpos = getpos('.')
+    call setpos('.', s:aergia_named_tag_pos)
+    execute "%s/{" . s:aergia_named_tag . "}/" . expand('<cword>') . "/g"
+    call setpos('.', l:cpos)
+    " remove named tag
+    let s:aergia_named_tag = ''
+  endif
+endfunction
+    " }}}
+  " }}}
 " }}}
 " Mappings {{{
-inoremap <silent> <Plug>(aergia) <esc>:call ExecuteAergia()<cr>
+inoremap <silent> <Plug>(aergia) <esc>:call ReplSnippet()<cr>
 execute "imap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
