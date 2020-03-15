@@ -50,7 +50,20 @@ tags just have a `+` between the start and the end of the tag.
 Named tags are tags that occur more than once in your snippet. When you have 
 set a value for one of these tags, aergia will automatically replace all other
 tags with that name for you. Only tags containing letters (a-z,A-Z) will be 
-recognised as named tags.
+recognised as named tags. 
 >
     {name}
+<
+
+-------------------------------------------------------------------------------
+                                                       *'snippet_command_tags'*
+Command tags are tags that get replaced by the returned value of the command 
+(read: function). They get executed when you invoke a snippet, before jumping 
+to the first tag. And they also support naming (see |snippet_named_tags|).
+>
+    {$command} or {$command=name}
+<
+Example where a command tag is used to get the active filename.
+>
+    {$expand("%:t")}
 <
