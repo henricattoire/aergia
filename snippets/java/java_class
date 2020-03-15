@@ -1,4 +1,4 @@
-public class {name} {
+public class {$expand('%:t:r')=name} {
   public {name}() {
     {+}
   }
