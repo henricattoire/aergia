@@ -56,6 +56,18 @@ def {name}():
 Snippet files can also contain named tags. When you set the value for one tag, `aergia` will automatically change
 all other tags with the same name.
 
+* command tags
+```
+public class {$expand('%:t:r')=name} {
+  public {name}() {
+    {+}
+  }
+}
+```
+
+If a tag starts with a `$`, the tag will be replaced with whatever output the command (read: function) returned. You can
+also let command tags mimic the behaviour of a named tag (syntax: `{$command=name}`).
+
 * filetype aware snippets
 ```
 python_def
