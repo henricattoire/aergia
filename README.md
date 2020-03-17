@@ -65,8 +65,7 @@ public class {$expand('%:t:r')=name} {
 }
 ```
 
-If a tag starts with a `$`, the tag will be replaced with whatever output the command (read: function) returned. You can
-also let command tags mimic the behaviour of a named tag (syntax: `{$command=name}`).
+If a tag starts with a `$`, the tag will be replaced with whatever output the command (read: function) after the `$` returned. You can also let command tags mimic the behaviour of a named tag (syntax: `{$command=name}`).
 
 * filetype aware snippets
 ```
