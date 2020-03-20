@@ -46,7 +46,7 @@ function! ReplSnippet()
     let l:cursor = getpos('.')
     let l:indent = IndentSnippet()
     " use sed to prefix the snippet with the correct indentation
-    execute "r !cat " . l:snippet_file . "| sed 's/^/" . l:indent . "/g'"
+    execute "r !cat " . l:snippet_file . "| grep -v '^~' | sed 's/^/" . l:indent . "/g'"
     call setpos('.', l:cursor)
     execute "normal! " . '"_dd'
     call ReplCommandTags(l:snippet_file) " replace all command tags before jumping to the first tag
