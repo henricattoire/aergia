@@ -1,0 +1,4 @@
+~ standard interface definition
+public interface {$expand('%:t:r')} {
+  {+}
+}

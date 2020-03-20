@@ -1,3 +1,4 @@
+~ function definition with docstring
 def {name}():
     """ {name}: {+} """
     {+}
