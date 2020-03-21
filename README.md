@@ -80,7 +80,7 @@ snippets have a priority over normal snippets.
 
 * add your own snippets interactively
 ```
-:AddAergiaSnippet
+:AddAergiaSnippet snippet_name
 ```
 
 This command allows you to interactively add snippets to `aergia` without having to leave vim. You can create

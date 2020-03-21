@@ -66,5 +66,5 @@ inoremap <silent> <Plug>(aergia) <esc>:call ReplSnippet()<cr>
 execute "imap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
 " Commands {{{
-command AddAergiaSnippet :call commands#AddAergiaSnippet()
+command -nargs=1 AddAergiaSnippet :call commands#AddAergiaSnippet(<f-args>)
 " }}}
