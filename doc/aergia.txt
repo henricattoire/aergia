@@ -4,6 +4,7 @@ Author:  Henri Cattoire
 
 1. Variables    |aergia-variables|
 2. Snippets     |aergia-snippets|
+3. Commands     |aergia-commands|
 
 ===============================================================================
 VARIABLES                                                    *aegria-variables*
@@ -67,3 +68,12 @@ Example where a command tag is used to get the active filename.
 >
     {$expand("%:t")}
 <
+
+===============================================================================
+COMMANDS                                                      *aegria-commands*
+
+-------------------------------------------------------------------------------
+                                                          *':AddAergiaSnippet'*
+This command allows you to interactively add snippets to aergia without having 
+to leave vim. The snippet can be specific to the filetype of the file you're
+currently working in, or you can choose to make it a global snippet.
