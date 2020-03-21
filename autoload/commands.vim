@@ -12,7 +12,7 @@ function! commands#AddAergiaSnippet()
     if ! isdirectory(g:aergia_snippets . "/" . &filetype)
       execute "silent !mkdir " . g:aergia_snippets . "/" . &filetype
     endif
-    execute "vsplit " . g:aergia_snippets . "/" . &filetype . "_" . l:name
+    execute "vsplit " . g:aergia_snippets . "/" . &filetype . "/" . &filetype . "_" . l:name
   endif
 endfunction
 " }}}
