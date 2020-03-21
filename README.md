@@ -75,3 +75,14 @@ python_def
 Filetype aware snippets are snippets that only work in files of the given filetype. In the example, 
 a `def` snippet is created for python files (syntax: `filetype_name` or `filetype-name`). Filetype aware 
 snippets have a priority over normal snippets.
+
+### commands
+
+* add your own snippets interactively
+```
+:AddAergiaSnippet
+```
+
+This command allows you to interactively add snippets to `aergia` without having to leave vim. You can create
+a snippet that only works in the filetype of the file that you're currently working in, or you can choose to 
+create a global snippet.
