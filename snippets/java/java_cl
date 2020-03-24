@@ -1,4 +1,4 @@
 ~ standard class definition
-public class {$expand('%:t:r')} {
-  {+}
+public class <{$expand('%:t:r')}> {
+  <{+}>
 }

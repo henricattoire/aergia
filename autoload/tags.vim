@@ -3,8 +3,8 @@
 
 " Variables {{{
 " tag start and end
-let s:aergia_start_tag = '{'
-let s:aergia_end_tag = '}'
+let s:aergia_start_tag = '<{'
+let s:aergia_end_tag = '}>'
 " last named tag properties
 let s:aergia_named_tag = ''
 let s:aergia_named_tag_pos = [0, 0, 0]
@@ -19,12 +19,12 @@ function! tags#NextTag()
     " always go the the first tag in the file
     execute "normal! Gn"
     " if current tag is a named tag, store it
-    if expand('<cWORD>') =~ '[{][A-Za-z]\+[}]'
+    if expand('<cWORD>') =~ '[<][{][A-Za-z]\+[}][>]'
       let s:aergia_named_tag = expand('<cword>')
       let s:aergia_named_tag_pos = getpos('.')
     endif
     let l:append = tags#Append()
-    execute "normal! df}"
+    execute "normal! df" . split(s:aergia_end_tag, '\zs')[-1]
     " append in imode on `empty` lines (do not move cursor one column back)
     if l:append == 0
       execute "startinsert"
@@ -40,7 +40,7 @@ endfunction
 function! tags#Append()
   let l:append = 0
   " set append to true if the tag is the last set of chars
-  if getline('.') =~ '^[^{+}]*{[^}{]\+}$'
+  if getline('.') =~ '^[^<{+}>]*[<][{][^<}{>]\+[}][>]$'
     let l:append = 1
   endif
   return l:append
@@ -51,7 +51,7 @@ function! tags#ReplNamedTag()
   if s:aergia_named_tag !=# ''
     let l:cpos = getpos('.')
     call setpos('.', s:aergia_named_tag_pos)
-    execute "%s/{" . s:aergia_named_tag . "}/" . expand('<cword>') . "/g"
+    execute "%s/<{" . s:aergia_named_tag . "}>/" . expand('<cword>') . "/g"
     call setpos('.', l:cpos)
     " remove named tag
     let s:aergia_named_tag = ''
@@ -60,21 +60,21 @@ endfunction
   " }}}
   " ReplCommandTags: replace all the command tags (if any) {{{
 function! tags#ReplCommandTags(snippet_file)
-  let l:tag_pattern = s:aergia_start_tag . "[$][^{}]\\+=\\?[^{}]*" . s:aergia_end_tag
+  let l:tag_pattern = s:aergia_start_tag . "[$][^<{}>]\\+=\\?[^<{}>]*" . s:aergia_end_tag
   let l:length = split(system("grep -c '" . l:tag_pattern . "' " . a:snippet_file), '\n')[0]
 
   let l:i = 0
   while l:i < l:length
     execute "normal! /" . l:tag_pattern . "\<cr>"
-    let l:command_tag = matchstr(getline('.'), '{$[^{}]\+}')
-    let l:command = matchstr(l:command_tag, '[^${}=]\+')
+    let l:command_tag = matchstr(getline('.'), '{$[^<{}>]\+}')
+    let l:command = matchstr(l:command_tag, '[^$<{}>=]\+')
     try
       execute 'let aergia_command_output = ' . l:command
     catch
       echoerr "AegriaError: couldn't execute command, " . l:command 
     endtry
     let l:append = tags#Append()
-    execute "normal! df}"
+    execute "normal! df" . split(s:aergia_end_tag, '\zs')[-1]
     if l:append == 0
       execute "normal! i" . aergia_command_output
     else
@@ -86,7 +86,7 @@ function! tags#ReplCommandTags(snippet_file)
       execute "normal! b"
       let s:aergia_named_tag = l:name
       let s:aergia_named_tag_pos = getpos('.')
-      call ReplNamedTag()
+      call tags#ReplNamedTag()
     endif
     let l:i += 1
   endwhile

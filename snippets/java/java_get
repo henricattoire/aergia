@@ -1,4 +1,4 @@
 ~ generic getter
-public {+} get{+}() {
-  return {+};
+public <{+}> get<{+}>() {
+  return <{+}>;
 }

@@ -1,4 +1,4 @@
 ~ function definition with docstring
-def {name}():
-    """ {name}: {+} """
-    {+}
+def <{name}>():
+    """ <{name}>: <{+}> """
+    <{+}>

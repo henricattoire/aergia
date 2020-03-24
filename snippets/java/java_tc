@@ -1,4 +1,4 @@
 ~ standard child class definition
-public class {$expand('%:t:r')} extends {+} {
-  {+}
+public class <{$expand('%:t:r')}> extends <{+}> {
+  <{+}>
 }

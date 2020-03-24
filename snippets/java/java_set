@@ -1,4 +1,4 @@
 ~ generic setter
-public void set{+}({+} {setvar}) {
-  {+} = {setvar};
+public void set<{+}>(<{+}> <{setvar}>) {
+  <{+}> = <{setvar}>;
 }

@@ -1,4 +1,4 @@
 ~ standard main function, executed at runtime
 public static void main(String[] args) {
-  {+}
+  <{+}>
 }
