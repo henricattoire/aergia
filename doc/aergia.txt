@@ -43,7 +43,7 @@ between tags using the same key to invoke a snippet.
 Tags are points in your snippet where you can put some text. In aergia, normal
 tags just have a `+` between the start and the end of the tag.
 >
-    {+}
+    <{+}>
 <
 
 -------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ set a value for one of these tags, aergia will automatically replace all other
 tags with that name for you. Only tags containing letters (a-z,A-Z) will be 
 recognised as named tags. 
 >
-    {name}
+    <{name}>
 <
 
 -------------------------------------------------------------------------------
@@ -62,11 +62,11 @@ Command tags are tags that get replaced by the returned value of the command
 (read: function). They get executed when you invoke a snippet, before jumping 
 to the first tag. And they also support naming (see |snippet_named_tags|).
 >
-    {$command} or {$command=name}
+    <{$command}> or <{$command=name}>
 <
 Example where a command tag is used to get the active filename.
 >
-    {$expand("%:t")}
+    <{$expand("%:t")}>
 <
 
 ===============================================================================
