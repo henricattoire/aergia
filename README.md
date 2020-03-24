@@ -2,7 +2,7 @@
 
 aergia is a small plugin that helps you manage snippets.
 
-![demo](https://media.giphy.com/media/MCLkzZHaazl5YP4XBG/source.gif)
+![demo](https://media.giphy.com/media/W2EJTef66XPGBWuebx/source.gif)
 
 ### installation
 
@@ -38,19 +38,19 @@ its subdirectories when looking for snippets.
 
 * example of a snippet file
 ```
-def {+}():
-    {+}
+def <{+}>():
+    <{+}>
 ```
 
-Snippet files can contains tags `{+}` and it is possible to jump from tag to tag using the same key
+Snippet files can contains tags `<{+}>` and it is possible to jump from tag to tag using the same key
 to invoke a snippet. Putting this snippet in a file called `def` will allow you to use the snippet
 by typing `def` [key](#configuration) in insert mode.
 
 * named tags
 ```
-def {name}():
-    """ {name}: {+} """
-    {+}
+def <{name}>():
+    """ <{name}>: <{+}> """
+    <{+}>
 ```
 
 Snippet files can also contain named tags. When you set the value for one tag, `aergia` will automatically change
@@ -58,9 +58,9 @@ all other tags with the same name.
 
 * command tags
 ```
-public class {$expand('%:t:r')=name} {
-  public {name}() {
-    {+}
+public class <{$expand('%:t:r')=name}> {
+  public <{name}>() {
+    <{+}>
   }
 }
 ```
