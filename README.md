@@ -73,7 +73,7 @@ python_def
 ```
 
 Filetype aware snippets are snippets that only work in files of the given filetype. In the example, 
-a `def` snippet is created for python files (syntax: `filetype_name` or `filetype-name`). Filetype aware 
+a `def` snippet is created for python files (syntax: `filetype_name`). Filetype aware 
 snippets have a priority over normal snippets.
 
 ### commands
@@ -86,3 +86,18 @@ snippets have a priority over normal snippets.
 This command allows you to interactively add snippets to `aergia` without having to leave vim. You can create
 a snippet that only works in the filetype of the file that you're currently working in, or you can choose to 
 create a global snippet.
+
+* edit a snippet interactively
+```
+:EditAergiaSnippet snippet_name
+```
+
+So you've added a new snippet using `AddAergiaSnippet` but it doesn't work and now you want to quickfix it. This
+command allows you to interactively change a snippet without leaving vim.
+
+* remove a snippet interactively
+```
+:RemoveAergiaSnippet snippet_name
+```
+
+Removing unused snippets (if you still know their name) is easy with `RemoveAergiaSnippet`.
