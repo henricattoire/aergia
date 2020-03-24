@@ -19,8 +19,8 @@ function! FindSnippet()
   " set global snippet file
   let l:snippet_file = globpath(g:aergia_snippets, '**/' . l:key)
   " overwrite with filetype specific snippet file if it exists
-  if globpath(g:aergia_snippets, '**/' . &filetype . '[_-]' . l:key) !=# ''
-    let l:snippet_file = globpath(g:aergia_snippets, '**/' . &filetype . '[-_]' . l:key)
+  if globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key) !=# ''
+    let l:snippet_file = globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key)
   endif
 
   if l:snippet_file !=# '' && l:key !=# ''
@@ -67,4 +67,6 @@ execute "imap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
 " Commands {{{
 command -nargs=1 AddAergiaSnippet :call commands#AddAergiaSnippet(<f-args>)
+command -nargs=1 EditAergiaSnippet :call commands#EditAergiaSnippet(<f-args>)
+command -nargs=1 RemoveAergiaSnippet :call commands#RemoveAergiaSnippet(<f-args>)
 " }}}

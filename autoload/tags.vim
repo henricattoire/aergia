@@ -32,7 +32,7 @@ function! tags#NextTag()
       execute "startinsert!"
     endif
   catch /E486.*/
-    echom "AegriaError: found no tag/snippet"
+    echom "AegriaWarning: found no tag/snippet"
   endtry
 endfunction
   " }}}

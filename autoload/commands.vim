@@ -7,7 +7,11 @@ function! commands#AddAergiaSnippet(name)
   if a:name =~ '[ \t]'
     echoerr "AergiaError: snippet name can not contain spaces or tabs"
   else
-    let l:type = inputlist(["Select type:", "1. " . &filetype, "2. global"])
+    if &filetype ==# ''
+      let l:type = 2
+    else
+      let l:type = inputlist(["Select type:", "1. " . &filetype, "2. global"])
+    endif
     if l:type == 2
       execute "vsplit " . g:aergia_snippets . "/" . a:name
     else
@@ -16,6 +20,35 @@ function! commands#AddAergiaSnippet(name)
       endif
       execute "vsplit " . g:aergia_snippets . "/" . &filetype . "/" . &filetype . "_" . a:name
     endif
+  endif
+endfunction
+" }}}
+" EditAergiaSnippet {{{
+function! commands#EditAergiaSnippet(name)
+  call commands#ManSnippetFile(a:name, "vsplit ")
+endfunction
+" }}}
+" RemoveAergiaSnippet {{{
+function! commands#RemoveAergiaSnippet(name)
+  call commands#ManSnippetFile(a:name, "silent !rm ")
+endfunction
+" }}}
+" ManSnippetFile {{{
+function! commands#ManSnippetFile(name, action)
+  let l:options = split(globpath(g:aergia_snippets, '**/*'. a:name), '\n')
+  if len(l:options) == 0
+    echom "AegriaWarning: you don't have a '" . a:name . "' snippet"
+  elseif len(l:options) == 1
+    execute a:action . l:options[0]
+  else
+    let l:list = ["Which snippet do you want to edit/remove: "]
+    let l:i = 1
+    for snippet in l:options
+      call add(l:list, i . ". " . fnamemodify(snippet, ':t'))
+      let l:i += 1
+    endfor
+    let l:chosen = inputlist(l:list)
+    execute a:action . l:options[l:chosen - 1]
   endif
 endfunction
 " }}}
