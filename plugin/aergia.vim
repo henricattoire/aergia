@@ -63,7 +63,9 @@ endfunction
 " }}}
 " Mappings {{{
 inoremap <silent> <Plug>(aergia) <esc>:call ReplSnippet()<cr>
+snoremap <silent> <Plug>(aergia) <esc>:call ReplSnippet()<cr>
 execute "imap " . g:aergia_key . " <Plug>(aergia)"
+execute "smap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
 " Commands {{{
 command -nargs=1 AddAergiaSnippet :call commands#AddAergiaSnippet(<f-args>)

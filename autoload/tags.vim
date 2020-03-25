@@ -31,6 +31,14 @@ function! tags#NextTag()
     else
       execute "startinsert!"
     endif
+    if s:aergia_named_tag !=# ''
+      if l:append == 0
+        execute "normal! i" . s:aergia_named_tag
+      else
+        execute "normal! a" . s:aergia_named_tag
+      endif
+      execute "normal! viw\<c-g>"
+    endif
   catch /E486.*/
     echom "AegriaWarning: found no tag/snippet"
   endtry
@@ -51,7 +59,10 @@ function! tags#ReplNamedTag()
   if s:aergia_named_tag !=# ''
     let l:cpos = getpos('.')
     call setpos('.', s:aergia_named_tag_pos)
-    execute "%s/<{" . s:aergia_named_tag . "}>/" . expand('<cword>') . "/g"
+    try
+      execute "%s/<{" . s:aergia_named_tag . "}>/" . expand('<cword>') . "/g"
+    catch /E486.*/
+    endtry
     call setpos('.', l:cpos)
     " remove named tag
     let s:aergia_named_tag = ''
