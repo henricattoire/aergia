@@ -2,7 +2,7 @@
 
 aergia is a small plugin that helps you manage snippets.
 
-![demo](https://media.giphy.com/media/W2EJTef66XPGBWuebx/source.gif)
+![demo](https://media.giphy.com/media/U1m7EAAasLTncrvVAT/source.gif)
 
 ### installation
 
@@ -54,7 +54,8 @@ def <{name}>():
 ```
 
 Snippet files can also contain named tags. When you set the value for one tag, `aergia` will automatically change
-all other tags with the same name.
+all other tags with the same name. Named tags are also default tags. So if you jump to a named tag and then you jump
+again, the tag will be replaced with whatever default (read: name) you gave the tag.
 
 * command tags
 ```
