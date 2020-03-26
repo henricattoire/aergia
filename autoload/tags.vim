@@ -76,7 +76,6 @@ function! tags#ReplCommandTags(snippet_file)
     catch
       echoerr "AegriaError: couldn't execute command, " . l:command 
     endtry
-    execute "normal! df" . split(s:aergia_end_tag, '\zs')[-1]
     call tags#InsertTag("normal! a" . aergia_command_output, "normal! i" . aergia_command_output)
     " if the command tag is attached to a named tag, replace the named tags
     let l:name = matchstr(matchstr(l:command_tag, '=[A-Za-z]\+'), '[A-Za-z]\+')
