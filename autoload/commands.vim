@@ -1,21 +1,21 @@
 " commands (v0.1): custom commands used by aergia.
 " author: Henri Cattoire.
 
-" AddAergiaSnippet {{{
+" AddAergiaSnippet: add a snippet interactively {{{
 function! commands#AddAergiaSnippet(name)
   " the key (read: name) to invoke the snippet can not contain spaces or tabs
   if a:name =~ '[ \t]'
     echoerr "AergiaError: snippet name can not contain spaces or tabs"
   else
-    if &filetype ==# ''
-      let l:type = 2
-    else
+    if &filetype
       let l:type = inputlist(["Select type:", "1. " . &filetype, "2. global"])
+    else
+      let l:type = 2
     endif
     if l:type == 2
       execute "vsplit " . g:aergia_snippets . "/" . a:name
     else
-      if ! isdirectory(g:aergia_snippets . "/" . &filetype)
+      if !isdirectory(g:aergia_snippets . "/" . &filetype)
         execute "silent !mkdir " . g:aergia_snippets . "/" . &filetype
       endif
       execute "vsplit " . g:aergia_snippets . "/" . &filetype . "/" . &filetype . "_" . a:name
@@ -23,23 +23,23 @@ function! commands#AddAergiaSnippet(name)
   endif
 endfunction
 " }}}
-" EditAergiaSnippet {{{
+" EditAergiaSnippet: edit a snippet interactively {{{
 function! commands#EditAergiaSnippet(name)
-  call commands#ManSnippetFile(a:name, "vsplit ")
+  call commands#SnippetState(a:name, "vsplit")
 endfunction
 " }}}
-" RemoveAergiaSnippet {{{
+" RemoveAergiaSnippet: remove a snippet interactively {{{
 function! commands#RemoveAergiaSnippet(name)
-  call commands#ManSnippetFile(a:name, "silent !rm ")
+  call commands#SnippetState(a:name, "silent! !rm")
 endfunction
 " }}}
-" ManSnippetFile {{{
-function! commands#ManSnippetFile(name, action)
+" SnippetState: helper to edit/remove a snippet {{{
+function! commands#SnippetState(name, action)
   let l:options = split(globpath(g:aergia_snippets, '**/*'. a:name), '\n')
   if len(l:options) == 0
-    echom "AegriaWarning: you don't have a '" . a:name . "' snippet"
+    echom "AergiaWarning: you don't have a '" . a:name . "' snippet"
   elseif len(l:options) == 1
-    execute a:action . l:options[0]
+    execute a:action . " " . l:options[0]
   else
     let l:list = ["Which snippet do you want to edit/remove: "]
     let l:i = 1
@@ -48,7 +48,7 @@ function! commands#ManSnippetFile(name, action)
       let l:i += 1
     endfor
     let l:chosen = inputlist(l:list)
-    execute a:action . l:options[l:chosen - 1]
+    execute a:action . " " . l:options[l:chosen - 1]
   endif
 endfunction
 " }}}

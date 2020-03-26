@@ -1,7 +1,7 @@
 " tags (v.0.1): tag related functions.
 " author: Henri Cattoire.
 
-" Variables {{{
+" Tag Variables {{{
 " tag start and end
 let s:aergia_start_tag = '<{'
 let s:aergia_end_tag = '}>'
@@ -9,7 +9,7 @@ let s:aergia_end_tag = '}>'
 let s:aergia_named_tag = ''
 let s:aergia_named_tag_pos = [0, 0, 0]
 " }}}
-" TagFunctions {{{
+" Tag Functions {{{
   " NextTag: select the next tag in the snippet {{{
 function! tags#NextTag()
   call tags#ReplNamedTag()
@@ -23,40 +23,32 @@ function! tags#NextTag()
       let s:aergia_named_tag = expand('<cword>')
       let s:aergia_named_tag_pos = getpos('.')
     endif
-    let l:append = tags#Append()
-    execute "normal! df" . split(s:aergia_end_tag, '\zs')[-1]
-    " append in imode on `empty` lines (do not move cursor one column back)
-    if l:append == 0
-      execute "startinsert"
-    else
-      execute "startinsert!"
-    endif
-    if s:aergia_named_tag !=# ''
-      if l:append == 0
-        execute "normal! i" . s:aergia_named_tag
-      else
-        execute "normal! a" . s:aergia_named_tag
-      endif
+    if s:aergia_named_tag != ''
+      call tags#InsertTag("normal! a" . s:aergia_named_tag, "normal! i" . s:aergia_named_tag)
       execute "normal! viw\<c-g>"
+    else
+      call tags#InsertTag("startinsert!", "startinsert")
     endif
   catch /E486.*/
-    echom "AegriaWarning: found no tag/snippet"
+    echom "AergiaWarning: found no tag/snippet"
   endtry
 endfunction
   " }}}
-  " Append: append (1) or insert (0) the cursor {{{
-function! tags#Append()
-  let l:append = 0
-  " set append to true if the tag is the last set of chars
+  " InsertTag: edit the tag in append or insert mode {{{
+function! tags#InsertTag(a_action, i_action)
+  " append is true if the tag is the last set of chars
   if getline('.') =~ '^[^<{+}>]*[<][{][^<}{>]\+[}][>]$'
-    let l:append = 1
+    execute "normal! df" . split(s:aergia_end_tag, '\zs')[-1]
+    execute a:a_action
+  else
+    execute "normal! df" . split(s:aergia_end_tag, '\zs')[-1]
+    execute a:i_action
   endif
-  return l:append
 endfunction
   " }}}
   " ReplNamedTag: replace the current named tag (if any) {{{
 function! tags#ReplNamedTag()
-  if s:aergia_named_tag !=# ''
+  if s:aergia_named_tag != ''
     let l:cpos = getpos('.')
     call setpos('.', s:aergia_named_tag_pos)
     try
@@ -84,16 +76,11 @@ function! tags#ReplCommandTags(snippet_file)
     catch
       echoerr "AegriaError: couldn't execute command, " . l:command 
     endtry
-    let l:append = tags#Append()
     execute "normal! df" . split(s:aergia_end_tag, '\zs')[-1]
-    if l:append == 0
-      execute "normal! i" . aergia_command_output
-    else
-      execute "normal! a" . aergia_command_output
-    endif
+    call tags#InsertTag("normal! a" . aergia_command_output, "normal! i" . aergia_command_output)
     " if the command tag is attached to a named tag, replace the named tags
     let l:name = matchstr(matchstr(l:command_tag, '=[A-Za-z]\+'), '[A-Za-z]\+')
-    if l:name !=# ''
+    if l:name != ''
       execute "normal! b"
       let s:aergia_named_tag = l:name
       let s:aergia_named_tag_pos = getpos('.')

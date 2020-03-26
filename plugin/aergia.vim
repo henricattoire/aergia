@@ -1,7 +1,7 @@
 " aergia (v.0.2): small plugin that tries to act as a snippet manager.
 " author: Henri Cattoire.
 
-" Variables {{{
+" Global Variables {{{
 if !exists('g:aergia_snippets') 
   let g:aergia_snippets = expand('~/.vim/bundle/aergia/snippets')
 else
@@ -12,28 +12,26 @@ if !exists('g:aergia_key')
   let g:aergia_key = '<c-a>'
 endif
 " }}}
-" Main {{{
+" Find and Replace Snippets {{{
   " FindSnippet: find the path of the snippet file {{{
 function! FindSnippet()
   let l:key = expand('<cword>')
   " set global snippet file
   let l:snippet_file = globpath(g:aergia_snippets, '**/' . l:key)
   " overwrite with filetype specific snippet file if it exists
-  if globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key) !=# ''
+  if globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key) != ''
     let l:snippet_file = globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key)
   endif
 
-  if l:snippet_file !=# '' && l:key !=# ''
+  if l:snippet_file != ''
     return l:snippet_file
-  else
-    return "file not found"
   endif
 endfunction
   " }}}
   " ReplSnippet: replace the word under the cursor with the snippet {{{
 function! ReplSnippet()
   let l:snippet_file = FindSnippet()
-  if l:snippet_file !=# "file not found" 
+  if l:snippet_file != ''
     execute "normal! b" . '"_dw'
     let l:cursor = getpos('.')
     let l:indent = IndentSnippet()
