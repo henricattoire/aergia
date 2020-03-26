@@ -23,7 +23,7 @@ function! FindSnippet()
     let l:snippet_file = globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key)
   endif
 
-  if l:snippet_file != ''
+  if l:key != '' && l:snippet_file != '' && !isdirectory(l:snippet_file)
     return l:snippet_file
   endif
 endfunction

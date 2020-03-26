@@ -3,29 +3,30 @@
 
 " Tag Variables {{{
 " tag start and end
-let s:aergia_start_tag = '<{'
-let s:aergia_end_tag = '}>'
+let s:start_tag = '<{'
+let s:end_tag = '}>'
 " last named tag properties
-let s:aergia_named_tag = ''
-let s:aergia_named_tag_pos = [0, 0, 0]
+let s:named_tag = ''
+let s:named_tag_pos = 0
 " }}}
 " Tag Functions {{{
   " NextTag: select the next tag in the snippet {{{
 function! tags#NextTag()
   call tags#ReplNamedTag()
-  let l:tag_pattern = s:aergia_start_tag . ".\\+" . s:aergia_end_tag
+  let l:tag_pattern = s:start_tag . ".\\+" . s:end_tag
   try 
     execute "normal! /" . l:tag_pattern . "\<cr>"
     " always go the the first tag in the file
     execute "normal! Gn"
     " if current tag is a named tag, store it
-    if expand('<cWORD>') =~ '[<][{][A-Za-z]\+[}][>]'
-      let s:aergia_named_tag = expand('<cword>')
-      let s:aergia_named_tag_pos = getpos('.')
+    let l:inner_tag = matchstr(getline('.'), "[<][{][^>+]\\+[}][>]")
+    if l:inner_tag != '' && matchstr(getline('.'), "^.*<{+}>.*[<][{][^>+]\\+[}][>]") == ''
+      let s:named_tag = matchstr(l:inner_tag, "[^<{}>]\\+")
+      let s:named_tag_pos = getpos('.')
     endif
-    if s:aergia_named_tag != ''
-      call tags#InsertTag("normal! a" . s:aergia_named_tag, "normal! i" . s:aergia_named_tag)
-      execute "normal! viw\<c-g>"
+    if s:named_tag != ''
+      call tags#InsertTag("normal! a" . s:named_tag, "normal! i" . s:named_tag)
+      execute "normal! v" . s:named_tag_pos[2] . "|" . "\<c-g>"
     else
       call tags#InsertTag("startinsert!", "startinsert")
     endif
@@ -38,32 +39,32 @@ endfunction
 function! tags#InsertTag(a_action, i_action)
   " append is true if the tag is the last set of chars
   if getline('.') =~ '^[^<{+}>]*[<][{][^<}{>]\+[}][>]$'
-    execute "normal! df" . split(s:aergia_end_tag, '\zs')[-1]
+    execute "normal! df" . split(s:end_tag, '\zs')[-1]
     execute a:a_action
   else
-    execute "normal! df" . split(s:aergia_end_tag, '\zs')[-1]
+    execute "normal! df" . split(s:end_tag, '\zs')[-1]
     execute a:i_action
   endif
 endfunction
   " }}}
   " ReplNamedTag: replace the current named tag (if any) {{{
 function! tags#ReplNamedTag()
-  if s:aergia_named_tag != ''
+  if s:named_tag != ''
     let l:cpos = getpos('.')
-    call setpos('.', s:aergia_named_tag_pos)
+    call setpos('.', s:named_tag_pos)
     try
-      execute "%s/<{" . s:aergia_named_tag . "}>/" . expand('<cword>') . "/g"
+      execute "%s/<{" . s:named_tag . "}>/" . expand('<cword>') . "/g"
     catch /E486.*/
     endtry
     call setpos('.', l:cpos)
     " remove named tag
-    let s:aergia_named_tag = ''
+    let s:named_tag = ''
   endif
 endfunction
   " }}}
   " ReplCommandTags: replace all the command tags (if any) {{{
 function! tags#ReplCommandTags(snippet_file)
-  let l:tag_pattern = s:aergia_start_tag . "[$][^<{}>]\\+=\\?[^<{}>]*" . s:aergia_end_tag
+  let l:tag_pattern = s:start_tag . "[$][^<{}>]\\+=\\?[^<{}>]*" . s:end_tag
   let l:length = split(system("grep -c '" . l:tag_pattern . "' " . a:snippet_file), '\n')[0]
 
   let l:i = 0
@@ -81,8 +82,8 @@ function! tags#ReplCommandTags(snippet_file)
     let l:name = matchstr(matchstr(l:command_tag, '=[A-Za-z]\+'), '[A-Za-z]\+')
     if l:name != ''
       execute "normal! b"
-      let s:aergia_named_tag = l:name
-      let s:aergia_named_tag_pos = getpos('.')
+      let s:named_tag = l:name
+      let s:named_tag_pos = getpos('.')
       call tags#ReplNamedTag()
     endif
     let l:i += 1
