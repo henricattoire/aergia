@@ -7,7 +7,7 @@ function! commands#AddAergiaSnippet(name)
   if a:name =~ '[ \t]'
     echoerr "AergiaError: snippet name can not contain spaces or tabs"
   else
-    if &filetype
+    if &filetype != ''
       let l:type = inputlist(["Select type:", "1. " . &filetype, "2. global"])
     else
       let l:type = 2
