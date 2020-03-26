@@ -50,8 +50,7 @@ tags just have a `+` between the start and the end of the tag.
                                                          *'snippet_named_tags'*
 Named tags are tags that occur more than once in your snippet. When you have 
 set a value for one of these tags, aergia will automatically replace all other
-tags with that name for you. Only tags containing letters (a-z,A-Z) will be 
-recognised as named tags. Named tags are also default tags. So if you jump to 
+tags with that name for you. Named tags are also default tags. So if you jump to 
 a named tag and then you jump again, the tag will be replaced with whatever 
 default (read: name) you gave the tag.
 >
