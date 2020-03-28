@@ -17,7 +17,7 @@ function! tags#NextTag()
   try 
     execute "normal! /" . l:tag_pattern . "\<cr>"
     " always go the the first tag in the file
-    execute "normal! Gn"
+    silent 'execute normal! "Gn"'
     " if current tag is a named tag, store it
     let l:inner_tag = matchstr(getline('.'), "[<][{][^>+]\\+[}][>]")
     if l:inner_tag != '' && matchstr(getline('.'), "^.*<{+}>.*[<][{][^>+]\\+[}][>]") == ''

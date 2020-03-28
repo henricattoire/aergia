@@ -2,7 +2,7 @@
 
 aergia is a small plugin that helps you manage snippets.
 
-![demo](https://media.giphy.com/media/U1m7EAAasLTncrvVAT/source.gif)
+![demo](https://media.giphy.com/media/jtQ4AftuBrT1cuLiGU/source.gif)
 
 ### installation
 
