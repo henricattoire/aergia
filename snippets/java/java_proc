@@ -1,4 +1,4 @@
 ~ standard procedure definition
-<{+}> void <{+}>(<{+}>) {
+public void <{+}>(<{+}>) {
   <{+}>
 }

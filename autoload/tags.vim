@@ -13,12 +13,12 @@ let s:named_tag_pos = 0
   " NextTag: select the next tag in the snippet {{{
 function! tags#NextTag()
   call tags#ReplNamedTag()
-  let l:tag_pattern = s:start_tag . ".\\+" . s:end_tag
+  let l:tag_pattern = s:start_tag . "[^>]\\+" . s:end_tag
   try 
     execute "normal! /" . l:tag_pattern . "\<cr>"
     " if current tag is a named tag, store it
     let l:inner_tag = matchstr(getline('.'), "[<][{][^>+]\\+[}][>]")
-    if l:inner_tag != '' && matchstr(getline('.'), "^.*<{+}>.*[<][{][^>+]\\+[}][>]") == ''
+    if l:inner_tag != '' && matchstr(getline('.'), "^.*<{+}>.*" . l:inner_tag) == ''
       let s:named_tag = matchstr(l:inner_tag, "[^<{}>]\\+")
       let s:named_tag_pos = getpos('.')
     endif
