@@ -34,9 +34,10 @@ function! ReplSnippet()
   if l:snippet_file != ''
     execute "normal! b" . '"_dw'
     let l:cursor = getpos('.')
-    let l:indent = IndentSnippet()
-    " use sed to prefix the snippet with the correct indentation
-    execute "r !grep -v '^~' " . l:snippet_file . " | sed 's/^/" . l:indent . "/g'"
+    " use sed give the snippet the correct indentation
+    execute "r !grep -v '^~' " . l:snippet_file
+          \ . " | sed 's/\t/" . Spaces(&shiftwidth) . "/g'"
+          \ . " | sed 's/^/"  . Spaces(indent(line('.'))) . "/'"
     call setpos('.', l:cursor)
     execute "normal! " . '"_dd'
     call tags#ReplCommandTags(l:snippet_file) " replace all command tags before jumping to the first tag
@@ -46,16 +47,15 @@ function! ReplSnippet()
   endif
 endfunction
   " }}}
-  " IndentSnippet: indent the snippet (using spaces) {{{
-function! IndentSnippet()
-  " keep indendation of file in mind
-  let l:indent_level = indent(line('.'))
-  let l:indent = ""
-  while l:indent_level > 0
-    let l:indent = l:indent . " "
-    let l:indent_level -= 1
+  " Spaces: generates a string with n spaces {{{
+function! Spaces(n)
+  let l:n = a:n
+  let l:spaces = ""
+  while l:n > 0
+    let l:spaces = l:spaces . " "
+    let l:n -= 1
   endwhile
-  return l:indent
+  return l:spaces
 endfunction
   " }}}
 " }}}
