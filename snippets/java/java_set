@@ -1,4 +1,3 @@
-~ generic setter
 public void set<{+}>(<{+}> <{setvar}>) {
-  <{+}> = <{setvar}>;
+	<{+}> = <{setvar}>;
 }

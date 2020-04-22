@@ -1,4 +1,3 @@
-~ standard class definition
 public class <{$expand('%:t:r')}> {
-  <{+}>
+	<{+}>
 }

@@ -1,4 +1,3 @@
-~ generic getter
 public <{+}> get<{+}>() {
-  return <{+}>;
+	return <{+}>;
 }
