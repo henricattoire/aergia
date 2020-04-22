@@ -33,10 +33,11 @@ function! ReplSnippet()
   let l:snippet_file = FindSnippet()
   if l:snippet_file != ''
     execute "normal! b" . '"_dw'
-    execute 'read ' . l:snippet_file
+    execute "normal! "
+          \ . (getline('.')[col('.')-1] ==# " " ? "a" : "i")
+          \ . join(readfile(l:snippet_file), "\n")
     " indent snippet
     execute "normal! `[=v`]"
-    execute "normal! k" . '"_dd'
     call tags#ReplCommandTags(l:snippet_file) " replace all command tags before jumping to the first tag
     call tags#NextTag()
   else
