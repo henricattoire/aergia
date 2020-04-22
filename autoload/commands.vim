@@ -1,8 +1,8 @@
 " commands (v0.1): custom commands used by aergia.
 " author: Henri Cattoire.
 
-" AddAergiaSnippet: add a snippet interactively {{{
-function! commands#AddAergiaSnippet(name)
+" AergiaAddSnippet: add a snippet interactively {{{
+function! commands#AergiaAddSnippet(name)
   " the key (read: name) to invoke the snippet can not contain spaces or tabs
   if a:name =~ '[ \t]'
     echoerr "AergiaError: snippet name can not contain spaces or tabs"
@@ -23,13 +23,13 @@ function! commands#AddAergiaSnippet(name)
   endif
 endfunction
 " }}}
-" EditAergiaSnippet: edit a snippet interactively {{{
-function! commands#EditAergiaSnippet(name)
+" AergiaEditSnippet: edit a snippet interactively {{{
+function! commands#AergiaEditSnippet(name)
   call commands#SnippetState(a:name, "vsplit")
 endfunction
 " }}}
-" RemoveAergiaSnippet: remove a snippet interactively {{{
-function! commands#RemoveAergiaSnippet(name)
+" AergiaRemoveSnippet: remove a snippet interactively {{{
+function! commands#AergiaRemoveSnippet(name)
   call commands#SnippetState(a:name, "silent! !rm")
 endfunction
 " }}}

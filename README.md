@@ -81,7 +81,7 @@ snippets have a priority over normal snippets.
 
 * add your own snippets interactively
 ```
-:AddAergiaSnippet snippet_name
+:AergiaAddSnippet snippet_name
 ```
 
 This command allows you to interactively add snippets to `aergia` without having to leave vim. You can create
@@ -90,15 +90,15 @@ create a global snippet.
 
 * edit a snippet interactively
 ```
-:EditAergiaSnippet snippet_name
+:AergiaEditSnippet snippet_name
 ```
 
-So you've added a new snippet using `AddAergiaSnippet` but it doesn't work and now you want to quickfix it. This
+So you've added a new snippet using `AergiaEditSnippet` but it doesn't work and now you want to quickfix it. This
 command allows you to interactively change a snippet without leaving vim.
 
 * remove a snippet interactively
 ```
-:RemoveAergiaSnippet snippet_name
+:AergiaRemoveSnippet snippet_name
 ```
 
-Removing unused snippets (if you still know their name) is easy with `RemoveAergiaSnippet`.
+Removing unused snippets (if you still know their name) is easy with `AergiaRemoveSnippet`.
