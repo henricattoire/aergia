@@ -2,7 +2,7 @@
 " author: Henri Cattoire.
 
 " Global Variables {{{
-if !exists('g:aergia_snippets') 
+if !exists('g:aergia_snippets')
   let g:aergia_snippets = expand('~/.vim/bundle/aergia/snippets')
 else
   let g:aergia_snippets = expand(g:aergia_snippets)
@@ -13,32 +13,33 @@ if !exists('g:aergia_key')
 endif
 " }}}
 " Find and Replace Snippets {{{
-  " FindSnippet: find the path of the snippet file {{{
+  " FindSnippet {{{
 function! FindSnippet()
   let l:key = expand('<cword>')
-  " set global snippet file
-  let l:snippet_file = globpath(g:aergia_snippets, '**/' . l:key)
-  " overwrite with filetype specific snippet file if it exists
-  if globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key) != ''
-    let l:snippet_file = globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key)
+  " look for a filetype specific snippet
+  let l:file = globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key)
+  " fall back on global snippet if necessary
+  if l:file == ''
+    let l:file = globpath(g:aergia_snippets, '**/' . l:key)
   endif
 
-  if l:key != '' && l:snippet_file != '' && !isdirectory(l:snippet_file)
-    return l:snippet_file
+  if l:key != '' && l:file != '' && !isdirectory(l:file)
+    return l:file
   endif
 endfunction
   " }}}
-  " ReplSnippet: replace the word under the cursor with the snippet {{{
+  " ReplSnippet {{{
 function! ReplSnippet()
-  let l:snippet_file = FindSnippet()
-  if l:snippet_file != ''
+  let l:file = FindSnippet()
+  if l:file != ''
+    let l:insert = match(getline('.'), expand('<cword>') . "$")
     execute "normal! b" . '"_dw'
     execute "normal! "
-          \ . (getline('.')[col('.')-1] ==# " " ? "a" : "i")
-          \ . join(readfile(l:snippet_file), "\n")
+          \ . (l:insert != -1 ? "a" : "i")
+          \ . join(readfile(l:file), "\n")
     " indent snippet
     execute "normal! `[=v`]"
-    call tags#ReplCommandTags(l:snippet_file) " replace all command tags before jumping to the first tag
+    call tags#ReplCommandTags(l:file) " replace all command tags before jumping to the first tag
     call tags#NextTag()
   else
     call tags#NextTag()

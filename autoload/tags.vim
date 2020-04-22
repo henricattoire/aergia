@@ -73,7 +73,7 @@ function! tags#ReplCommandTags(snippet_file)
     try
       execute 'let aergia_command_output = ' . l:command
     catch
-      echoerr "AegriaError: couldn't execute command, " . l:command 
+      echoerr "AegriaError: couldn't execute command, " . l:command
     endtry
     call tags#InsertTag("normal! a" . aergia_command_output, "normal! i" . aergia_command_output)
     " if the command tag is attached to a named tag, replace the named tags
