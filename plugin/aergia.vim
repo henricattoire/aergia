@@ -33,29 +33,15 @@ function! ReplSnippet()
   let l:snippet_file = FindSnippet()
   if l:snippet_file != ''
     execute "normal! b" . '"_dw'
-    let l:cursor = getpos('.')
-    " use sed give the snippet the correct indentation
-    execute "r !grep -v '^~' " . l:snippet_file
-          \ . " | sed 's/\t/" . Spaces(&shiftwidth) . "/g'"
-          \ . " | sed 's/^/"  . Spaces(indent(line('.'))) . "/'"
-    call setpos('.', l:cursor)
-    execute "normal! " . '"_dd'
+    execute 'read ' . l:snippet_file
+    " indent snippet
+    execute "normal! `[=v`]"
+    execute "normal! k" . '"_dd'
     call tags#ReplCommandTags(l:snippet_file) " replace all command tags before jumping to the first tag
     call tags#NextTag()
   else
     call tags#NextTag()
   endif
-endfunction
-  " }}}
-  " Spaces: generates a string with n spaces {{{
-function! Spaces(n)
-  let l:n = a:n
-  let l:spaces = ""
-  while l:n > 0
-    let l:spaces = l:spaces . " "
-    let l:n -= 1
-  endwhile
-  return l:spaces
 endfunction
   " }}}
 " }}}
@@ -66,7 +52,7 @@ execute "imap " . g:aergia_key . " <Plug>(aergia)"
 execute "smap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
 " Commands {{{
-command -nargs=1 AddAergiaSnippet :call commands#AddAergiaSnippet(<f-args>)
-command -nargs=1 EditAergiaSnippet :call commands#EditAergiaSnippet(<f-args>)
-command -nargs=1 RemoveAergiaSnippet :call commands#RemoveAergiaSnippet(<f-args>)
+command -nargs=1 AergiaAddSnippet :call commands#AergiaAddSnippet(<f-args>)
+command -nargs=1 AergiaEditSnippet :call commands#AergiaEditSnippet(<f-args>)
+command -nargs=1 AergiaRemoveSnippet :call commands#AergiaRemoveSnippet(<f-args>)
 " }}}
