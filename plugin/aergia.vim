@@ -1,4 +1,4 @@
-" aergia (v.0.2): small plugin that tries to act as a snippet manager.
+" aergia (v.0.3): small plugin that tries to act as a snippet manager.
 " author: Henri Cattoire.
 
 " Global Variables {{{
@@ -39,10 +39,10 @@ function! ReplSnippet()
           \ . join(readfile(l:file), "\n")
     " indent snippet
     execute "normal! `[=v`]"
-    call tags#ReplCommandTags(l:file) " replace all command tags before jumping to the first tag
-    call tags#NextTag()
+    call tags#ProcessCmds(l:file) " replace all command tags before jumping to the first tag
+    call tags#JumpTag()
   else
-    call tags#NextTag()
+    call tags#JumpTag()
   endif
 endfunction
   " }}}

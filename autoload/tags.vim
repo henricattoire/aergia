@@ -1,88 +1,93 @@
-" tags (v.0.1): tag related functions.
+" tags (v.0.3): tag related functions.
 " author: Henri Cattoire.
 
 " Tag Variables {{{
-" tag start and end
-let s:start_tag = '<{'
-let s:end_tag = '}>'
-" last named tag properties
-let s:named_tag = ''
-let s:named_tag_pos = 0
+let s:opening = '<{'
+let s:typical = '+' " content of a 'typical' (not special) tag
+let s:closing = '}>'
+let s:pattern = s:opening . '[^>]\+' . s:closing " prevent greedy match
+" named tag
+let s:properties = { "name": '', "position": 0, }
+" cmd tag
+let s:cmds = s:opening . '[$][^' . s:opening . s:closing . ']\+=\?'
+      \ . '[^' . s:opening . s:closing . ']*' . s:closing
+let s:delimeter = '='
 " }}}
 " Tag Functions {{{
-  " NextTag: select the next tag in the snippet {{{
-function! tags#NextTag()
-  call tags#ReplNamedTag()
-  let l:tag_pattern = s:start_tag . "[^>]\\+" . s:end_tag
-  try 
-    execute "normal! /" . l:tag_pattern . "\<cr>"
-    " if current tag is a named tag, store it
-    let l:inner_tag = matchstr(getline('.'), "[<][{][^>+]\\+[}][>]")
-    if l:inner_tag != '' && matchstr(getline('.'), "^.*<{+}>.*" . l:inner_tag) == ''
-      let s:named_tag = matchstr(l:inner_tag, "[^<{}>]\\+")
-      let s:named_tag_pos = getpos('.')
-    endif
-    if s:named_tag != ''
-      call tags#InsertTag("normal! a" . s:named_tag, "normal! i" . s:named_tag)
-      execute "normal! v" . s:named_tag_pos[2] . "|" . "\<c-g>"
+  " JumpTag {{{
+function! tags#JumpTag()
+  " if properites contains a named tag, process it
+  call tags#ProcessNamedTag()
+
+  let l:n = util#GetCount(s:pattern) " number of tags left in the file
+  if l:n != 0
+    silent! execute "normal! /" . s:pattern . "\<cr>"
+    " if the tag is a named tag, store it
+    let l:content = matchstr(getline('.')[col('.') - 1:], '[^' . s:opening . s:closing . ']\+')
+    if l:content !=? s:typical
+      let s:properties["name"] = l:content
+      let s:properties["position"] = getpos('.')
+      " remove tag bounds and tell vim the select the name
+      call tags#ReplTag("normal! a" . s:properties["name"], "normal! i" . s:properties["name"])
+      execute "normal! v" . s:properties["position"][2] . "|\<c-g>"
     else
-      call tags#InsertTag("startinsert!", "startinsert")
+      call tags#ReplTag("startinsert!", "startinsert")
     endif
-  catch /E486.*/
-    echom "AergiaWarning: found no tag/snippet"
-  endtry
+  endif
 endfunction
   " }}}
-  " InsertTag: edit the tag in append or insert mode {{{
-function! tags#InsertTag(a_action, i_action)
-  " append is true if the tag is the last set of chars
-  if getline('.') =~ '^[^<{+}>]*[<][{][^<}{>]\+[}][>]$'
-    execute "normal! df" . split(s:end_tag, '\zs')[-1]
-    execute a:a_action
+  " ReplTag {{{
+function! tags#ReplTag(append, insert)
+  " append if this tag is the last set of chars on the line
+  if getline('.')[col('.') - 1:] =~ '^' . s:pattern . '$'
+    execute "normal! df" . s:closing[-1:]
+    execute a:append
   else
-    execute "normal! df" . split(s:end_tag, '\zs')[-1]
-    execute a:i_action
+    execute "normal! df" . s:closing[-1:]
+    execute a:insert
   endif
 endfunction
   " }}}
-  " ReplNamedTag: replace the current named tag (if any) {{{
-function! tags#ReplNamedTag()
-  if s:named_tag != ''
-    let l:cpos = getpos('.')
-    call setpos('.', s:named_tag_pos)
-    try
-      execute "%s/<{" . s:named_tag . "}>/" . expand('<cword>') . "/g"
-    catch /E486.*/
-    endtry
-    call setpos('.', l:cpos)
-    " remove named tag
-    let s:named_tag = ''
+  " ProcessNamedTag {{{
+function! tags#ProcessNamedTag()
+  " replace named tag with the cword on postion inside properties
+  if s:properties["name"] !=? ''
+    let l:current = getpos('.') " current position, so we can jump back later
+    call setpos('.', s:properties["position"])
+    silent! execute "%s/" . s:opening . s:properties["name"] . s:closing .  "/"
+          \ . expand('<cword>') . "/g"
+    call setpos('.', l:current)
+    " reset named tag
+    let s:properties["name"] = ''
   endif
 endfunction
   " }}}
-  " ReplCommandTags: replace all the command tags (if any) {{{
-function! tags#ReplCommandTags(snippet_file)
-  let l:tag_pattern = s:start_tag . "[$][^<{}>]\\+=\\?[^<{}>]*" . s:end_tag
-  let l:length = split(system("grep -c '" . l:tag_pattern . "' " . a:snippet_file), '\n')[0]
+  " ProcessCmds {{{
+function! tags#ProcessCmds(file) abort
+  " number of cmd tags to process
+  let l:n = util#GetCount(s:cmds)
 
   let l:i = 0
-  while l:i < l:length
-    execute "normal! /" . l:tag_pattern . "\<cr>"
-    let l:command_tag = matchstr(getline('.'), '{$[^<{}>]\+}')
-    let l:command = matchstr(l:command_tag, '[^$<{}>=]\+')
+  while l:i < l:n
+    silent! execute "normal! /" . s:cmds . "\<cr>"
+
+    let l:cmd = matchstr(getline('.')[col('.') - 1:], '[^$=' . s:opening . s:closing . ']\+')
     try
-      execute 'let aergia_command_output = ' . l:command
+      execute 'let output = ' . l:cmd
     catch
-      echoerr "AegriaError: couldn't execute command, " . l:command
+      echoerr "AegriaError: couldn't execute command, " . l:cmd
     endtry
-    call tags#InsertTag("normal! a" . aergia_command_output, "normal! i" . aergia_command_output)
-    " if the command tag is attached to a named tag, replace the named tags
-    let l:name = matchstr(matchstr(l:command_tag, '=[A-Za-z]\+'), '[A-Za-z]\+')
-    if l:name != ''
+    " grab the name this cmd is attached to
+    let l:name = matchstr(getline('.')[col('.') - 1:], s:delimeter . '[^' . s:opening . s:closing . ']\+')
+
+    call tags#ReplTag("normal! a" . output , "normal! i" . output)
+    " replace potential named tags
+    if l:name !=? ''
+      " for now only cmds that have one word as output are supported
       execute "normal! b"
-      let s:named_tag = l:name
-      let s:named_tag_pos = getpos('.')
-      call tags#ReplNamedTag()
+      let s:properties["name"] = l:name
+      let s:properties["position"] = getpos('.')
+      call tags#ProcessNamedTag()
     endif
     let l:i += 1
   endwhile
