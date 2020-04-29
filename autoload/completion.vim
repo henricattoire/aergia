@@ -3,6 +3,7 @@
 
 " AergiaComplete {{{
 function! completion#AergiaComplete()
+  " find start of snippet and store the part of a potential snippet in base
   let l:line = getline('.')[:col('.')]
   let l:start = col('.') - 1
 
@@ -10,9 +11,8 @@ function! completion#AergiaComplete()
     let l:start -= 1
   endwhile
 
+  " search for filetype and global snippets matching base
   let l:base = l:line[l:start:]
-  echom  l:base
-
   let l:res = []
   if &filetype !=? ''
     call completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:base . '*', 0, 1))
