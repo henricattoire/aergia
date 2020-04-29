@@ -104,3 +104,5 @@ command allows you to interactively change a snippet without leaving vim.
 Removing unused snippets (if you still know their name) is easy with `AergiaRemoveSnippet`.
 
 ### completion
+
+See [documentation](doc/aergia.txt).
