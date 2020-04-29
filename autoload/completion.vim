@@ -1,6 +1,14 @@
 " completion (v.0.1): completion function.
 " author: Henri Cattoire.
 
+" AergiaDone {{{
+function! completion#AergiaDone()
+  if empty(v:completed_item) || !filereadable(get(v:completed_item, 'user_data', ''))
+    return
+  endif
+  call IncludeFile(v:completed_item["user_data"])
+endfunction
+" }}}
 " AergiaComplete {{{
 function! completion#AergiaComplete()
   " find start of snippet and store the part of a potential snippet in base
@@ -17,9 +25,7 @@ function! completion#AergiaComplete()
   if &filetype !=? ''
     call completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:base . '*', 0, 1))
   endif
-
-  call completion#AddItems(l:res,
-        \ map(globpath(g:aergia_snippets, 'global_' . l:base . '*', 0, 1), "substitute(v:val, '.*/', '', '')"))
+  call completion#AddItems(l:res, globpath(g:aergia_snippets, 'global_' . l:base . '*', 0, 1))
 
   call complete(l:start + 1, l:res)
   return ''
@@ -30,7 +36,10 @@ function! completion#AddItems(res, items)
   let l:i = 0
   while l:i < len(a:items)
     let l:snippet = split(substitute(a:items[l:i], '.*/', '', ''), '_')
-    call add(a:res, { "word": l:snippet[1], "menu": "[" . l:snippet[0] . "]", })
+    call add(a:res, {
+          \ "word": l:snippet[1],
+          \ "menu": "[" . l:snippet[0] . "]",
+          \ "user_data": a:items[l:i], })
     let l:i += 1
   endwhile
 endfunction

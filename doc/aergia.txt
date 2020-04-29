@@ -5,6 +5,7 @@ Author:  Henri Cattoire
 1. Variables    |aergia-variables|
 2. Snippets     |aergia-snippets|
 3. Commands     |aergia-commands|
+4. Completion   |aergia-completion|
 
 ===============================================================================
 VARIABLES                                                    *aegria-variables*
@@ -29,6 +30,13 @@ change it in your `vimrc`.
     let g:aergia_key = '<c-j>'
 <
 
+-------------------------------------------------------------------------------
+                                                        *'g:aergia_completion'*
+Default: 0
+
+Setting this variable to true, or 1, will enable aergia to auto expand snippets
+after CompleteDone. See |aergia-completion|.
+
 ===============================================================================
 SNIPPETS                                                      *aegria-snippets*
 
@@ -48,10 +56,10 @@ tags just have a `+` between the start and the end of the tag.
 
 -------------------------------------------------------------------------------
                                                          *'snippet_named_tags'*
-Named tags are tags that occur more than once in your snippet. When you have 
+Named tags are tags that occur more than once in your snippet. When you have
 set a value for one of these tags, aergia will automatically replace all other
-tags with that name for you. Named tags are also default tags. So if you jump to 
-a named tag and then you jump again, the tag will be replaced with whatever 
+tags with that name for you. Named tags are also default tags. So if you jump to
+a named tag and then you jump again, the tag will be replaced with whatever
 default (read: name) you gave the tag.
 >
     <{name}>
@@ -59,8 +67,8 @@ default (read: name) you gave the tag.
 
 -------------------------------------------------------------------------------
                                                        *'snippet_command_tags'*
-Command tags are tags that get replaced by the returned value of the command 
-(read: function). They get executed when you invoke a snippet, before jumping 
+Command tags are tags that get replaced by the returned value of the command
+(read: function). They get executed when you invoke a snippet, before jumping
 to the first tag. And they also support naming (see |snippet_named_tags|).
 >
     <{$command}> or <{$command=name}>
@@ -75,7 +83,7 @@ COMMANDS                                                      *aegria-commands*
 
 -------------------------------------------------------------------------------
                                                           *':AergiaAddSnippet'*
-This command allows you to interactively add snippets to aergia without having 
+This command allows you to interactively add snippets to aergia without having
 to leave vim. The snippet can be specific to the filetype of the file you're
 currently working in, or you can choose to make it a global snippet.
 >
@@ -84,8 +92,8 @@ currently working in, or you can choose to make it a global snippet.
 
 -------------------------------------------------------------------------------
                                                          *':AergiaEditSnippet'*
-So you've added a new snippet using AddAergiaSnippet but it doesn't work and 
-now you want to quickfix it. This command allows you to interactively change 
+So you've added a new snippet using AddAergiaSnippet but it doesn't work and
+now you want to quickfix it. This command allows you to interactively change
 a snippet without leaving vim.
 >
     :AergiaEditSnippet snippet_name
@@ -97,3 +105,25 @@ Removing unused snippets (if you still know their name) is eas.
 >
     :AergiaRemoveSnippet snippet_name
 <
+
+===============================================================================
+COMPLETION                                                  *aegria-completion*
+
+-------------------------------------------------------------------------------
+                                                            *'completion-info'*
+When completion is set, aergia will just create an autocmd to auto expand the
+snippets on CompleteDone. Other than that, aergia has a custom completion func,
+that you can use with a standalone mapping or integrate with your favorite
+completion plugin.
+
+Here, completion is called whenever <c-x><c-a> is pressed.
+< `in vimrc`
+inoremap <c-x><c-a> <c-r>=completion#AergiaComplete()<cr>
+>
+
+Example of integration with mucomplete, a completion plugin.
+< `in vimrc`
+call mucomplete#add_user_mapping('aergia', "\<c-r>=completion#AergiaComplete()\<cr>")
+let g:mucomplete#chains = {
+  \ 'default' : [ 'aergia', 'path', 'omni', 'keyn', 'dict' ], }
+>
