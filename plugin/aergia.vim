@@ -39,7 +39,7 @@ function! ReplSnippet()
           \ . join(readfile(l:file), "\n")
     " indent snippet
     execute "normal! `[=v`]"
-    call tags#ProcessCmds(l:file) " replace all command tags before jumping to the first tag
+    call tags#ProcessCmds() " replace all command tags before jumping to the first tag
     call tags#JumpTag()
   else
     call tags#JumpTag()
@@ -52,6 +52,7 @@ inoremap <silent> <Plug>(aergia) <esc>:call ReplSnippet()<cr>
 snoremap <silent> <Plug>(aergia) <esc>:call ReplSnippet()<cr>
 execute "imap " . g:aergia_key . " <Plug>(aergia)"
 execute "smap " . g:aergia_key . " <Plug>(aergia)"
+inoremap <C-x><C-m> <C-r>=completion#AergiaComplete()<CR>
 " }}}
 " Commands {{{
 command -nargs=1 AergiaAddSnippet :call commands#AergiaAddSnippet(<f-args>)

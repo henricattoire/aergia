@@ -3,7 +3,7 @@
 
 " AergiaAddSnippet {{{
 function! commands#AergiaAddSnippet(name)
-  if a:name =~ '^[A-Za-z0-9\-_.]\+'
+  if a:name =~ '^[A-Za-z0-9]\+$'
     if &filetype != ''
       let l:type = inputlist(["Select type:", "1. " . &filetype, "2. global"])
     else
@@ -14,7 +14,7 @@ function! commands#AergiaAddSnippet(name)
         execute "silent !mkdir " . g:aergia_snippets . "/" . &filetype
       endif
       execute "split " . g:aergia_snippets . "/"
-            \ . (l:type == 2 ? a:name : &filetype . "/" . &filetype . "_" . a:name)
+            \ . (l:type == 2 ? "global_" . a:name : &filetype . "/" . &filetype . "_" . a:name)
     endif
   endif
 endfunction

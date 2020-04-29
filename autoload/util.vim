@@ -11,8 +11,6 @@ endfunction
 " Wrap {{{
 function! util#Wrap(s)
   " make string safe to be used in a regex, wrap each char in brackets
-  let l:wrapped = substitute(a:s, '.', { m -> '[' . m[0] . ']' }, 'g')
-  return l:wrapped
+  return substitute(a:s, '.', { m -> '[' . m[0] . ']' }, 'g')
 endfunction
 " }}}
-"

@@ -63,7 +63,7 @@ function! tags#ProcessNamedTag()
 endfunction
   " }}}
   " ProcessCmds {{{
-function! tags#ProcessCmds(file) abort
+function! tags#ProcessCmds() abort
   " number of cmd tags to process
   let l:n = util#GetCount(s:cmds)
 
