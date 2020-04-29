@@ -74,26 +74,26 @@ Example where a command tag is used to get the active filename.
 COMMANDS                                                      *aegria-commands*
 
 -------------------------------------------------------------------------------
-                                                          *':AddAergiaSnippet'*
+                                                          *':AergiaAddSnippet'*
 This command allows you to interactively add snippets to aergia without having 
 to leave vim. The snippet can be specific to the filetype of the file you're
 currently working in, or you can choose to make it a global snippet.
 >
-    :AddAergiaSnippet snippet_name
+    :AergiaAddSnippet snippet_name
 <
 
 -------------------------------------------------------------------------------
-                                                         *':EditAergiaSnippet'*
+                                                         *':AergiaEditSnippet'*
 So you've added a new snippet using AddAergiaSnippet but it doesn't work and 
 now you want to quickfix it. This command allows you to interactively change 
 a snippet without leaving vim.
 >
-    :EditAergiaSnippet snippet_name
+    :AergiaEditSnippet snippet_name
 <
 
 -------------------------------------------------------------------------------
-                                                        *'RemoveAergiaSnippet'*
+                                                        *'AergiaRemoveSnippet'*
 Removing unused snippets (if you still know their name) is eas.
 >
-    :RemoveAergiaSnippet snippet_name
+    :AergiaRemoveSnippet snippet_name
 <
