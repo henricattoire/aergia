@@ -24,7 +24,7 @@ function! commands#AergiaEditSnippet(name)
   call commands#Do(a:name, "split $")
 endfunction
 " }}}
-" AergiaRemoveSnippet: remove a snippet interactively {{{
+" AergiaRemoveSnippet {{{
 function! commands#AergiaRemoveSnippet(name)
   call commands#Do(a:name, "call delete('$')")
 endfunction
