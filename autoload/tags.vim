@@ -11,7 +11,7 @@ let s:properties = { "name": '', "position": 0, }
 " cmd tag
 let s:cmds = s:opening . '[$][^' . s:opening . s:closing . ']\+=\?'
       \ . '[^' . s:opening . s:closing . ']*' . s:closing
-let s:delimeter = '='
+let s:special = '$='
 " }}}
 " Tag Functions {{{
   " JumpTag {{{
@@ -71,14 +71,14 @@ function! tags#ProcessCmds(file) abort
   while l:i < l:n
     silent! execute "normal! /" . s:cmds . "\<cr>"
 
-    let l:cmd = matchstr(getline('.')[col('.') - 1:], '[^$=' . s:opening . s:closing . ']\+')
+    let l:cmd = matchstr(getline('.')[col('.') - 1:], '[^' . s:special . s:opening . s:closing . ']\+')
     try
       execute 'let output = ' . l:cmd
     catch
       echoerr "AegriaError: couldn't execute command, " . l:cmd
     endtry
     " grab the name this cmd is attached to
-    let l:name = matchstr(getline('.')[col('.') - 1:], s:delimeter . '[^' . s:opening . s:closing . ']\+')
+    let l:name = matchstr(getline('.')[col('.') - 1:], s:special[-1] . '[^' . s:opening . s:closing . ']\+')
 
     call tags#ReplTag("normal! a" . output , "normal! i" . output)
     " replace potential named tags
