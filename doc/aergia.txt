@@ -117,12 +117,12 @@ that you can use with a standalone mapping or integrate with your favorite
 completion plugin.
 
 Here, completion is called whenever <c-x><c-a> is pressed.
-< `in vimrc`
+<
 inoremap <c-x><c-a> <c-r>=completion#AergiaComplete()<cr>
 >
 
 Example of integration with mucomplete, a completion plugin.
-< `in vimrc`
+<
 call mucomplete#add_user_mapping('aergia', "\<c-r>=completion#AergiaComplete()\<cr>")
 let g:mucomplete#chains = {
   \ 'default' : [ 'aergia', 'path', 'omni', 'keyn', 'dict' ], }
