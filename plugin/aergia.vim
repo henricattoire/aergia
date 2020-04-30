@@ -11,10 +11,6 @@ endif
 if !exists('g:aergia_key')
   let g:aergia_key = '<c-a>'
 endif
-
-if exists('g:aergia_completion') && g:aergia_completion
-  autocmd CompleteDone * call completion#AergiaDone()
-endif
 " }}}
 " Find and Replace Snippets {{{
   " FindSnippet {{{
@@ -63,7 +59,7 @@ execute "imap " . g:aergia_key . " <Plug>(aergia)"
 execute "smap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
 " Commands {{{
-command -nargs=1 AergiaAddSnippet :call commands#AergiaAddSnippet(<f-args>)
-command -nargs=1 AergiaEditSnippet :call commands#AergiaEditSnippet(<f-args>)
-command -nargs=1 AergiaRemoveSnippet :call commands#AergiaRemoveSnippet(<f-args>)
+command -nargs=1 AergiaAddSnippet :call expansions#commands#AergiaAddSnippet(<f-args>)
+command -nargs=1 -complete=customlist,util#List AergiaEditSnippet :call expansions#commands#AergiaEditSnippet(<f-args>)
+command -nargs=1 -complete=customlist,util#List AergiaRemoveSnippet :call expansions#commands#AergiaRemoveSnippet(<f-args>)
 " }}}

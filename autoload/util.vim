@@ -14,3 +14,14 @@ function! util#Wrap(s)
   return substitute(a:s, '.', { m -> '[' . m[0] . ']' }, 'g')
 endfunction
 " }}}
+" List {{{
+function! util#List(arg, line, pos)
+  return util#Format('**/', a:arg)
+endfunction
+" }}}
+" Format {{{
+function! util#Format(type, filter)
+  return map(filter(globpath(g:aergia_snippets, a:type . '*' . a:filter . '*', 0, 1), "!isdirectory(v:val)"),
+        \ "substitute(v:val, '.*/', '', 'g')")
+endfunction
+" }}}

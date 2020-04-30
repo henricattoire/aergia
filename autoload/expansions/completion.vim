@@ -1,16 +1,8 @@
 " completion (v.0.1): completion function.
 " author: Henri Cattoire.
 
-" AergiaDone {{{
-function! completion#AergiaDone()
-  if empty(v:completed_item) || !filereadable(get(v:completed_item, 'user_data', ''))
-    return
-  endif
-  call IncludeFile(v:completed_item["user_data"])
-endfunction
-" }}}
 " AergiaComplete {{{
-function! completion#AergiaComplete()
+function! expansions#completion#AergiaComplete()
   " find start of snippet and store the part of a potential snippet in base
   let l:line = getline('.')[:col('.')]
   let l:start = col('.') - 1
@@ -23,16 +15,16 @@ function! completion#AergiaComplete()
   let l:base = l:line[l:start:]
   let l:res = []
   if &filetype !=? ''
-    call completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:base . '*', 0, 1))
+    call expansions#completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:base . '*', 0, 1))
   endif
-  call completion#AddItems(l:res, globpath(g:aergia_snippets, 'global_' . l:base . '*', 0, 1))
+  call expansions#completion#AddItems(l:res, globpath(g:aergia_snippets, 'global_' . l:base . '*', 0, 1))
 
   call complete(l:start + 1, l:res)
   return ''
 endfunction
 " }}}
 " AddItems {{{
-function! completion#AddItems(res, items)
+function! expansions#completion#AddItems(res, items)
   let l:i = 0
   while l:i < len(a:items)
     let l:snippet = split(substitute(a:items[l:i], '.*/', '', ''), '_')
