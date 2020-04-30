@@ -30,13 +30,6 @@ change it in your `vimrc`.
     let g:aergia_key = '<c-j>'
 <
 
--------------------------------------------------------------------------------
-                                                        *'g:aergia_completion'*
-Default: 0
-
-Setting this variable to true, or 1, will enable aergia to auto expand snippets
-after CompleteDone. See |aergia-completion|.
-
 ===============================================================================
 SNIPPETS                                                      *aegria-snippets*
 
@@ -111,19 +104,18 @@ COMPLETION                                                  *aegria-completion*
 
 -------------------------------------------------------------------------------
                                                             *'completion-info'*
-When completion is set, aergia will just create an autocmd to auto expand the
-snippets on CompleteDone. Other than that, aergia has a custom completion func,
-that you can use with a standalone mapping or integrate with your favorite
-completion plugin.
+Other than that, aergia has a custom completion func, that you can use with a 
+standalone mapping or integrate with your favorite completion plugin.
 
 Here, completion is called whenever <c-x><c-a> is pressed.
 <
-inoremap <c-x><c-a> <c-r>=completion#AergiaComplete()<cr>
+inoremap <c-x><c-a> <c-r>=expansions#completion#AergiaComplete()<cr>
 >
 
 Example of integration with mucomplete, a completion plugin.
 <
-call mucomplete#add_user_mapping('aergia', "\<c-r>=completion#AergiaComplete()\<cr>")
+let g:mucomplete#user_mappings = {
+      \ 'aergia' : "\<c-r>=expansions#completion#AergiaComplete()\<cr>", }
 let g:mucomplete#chains = {
   \ 'default' : [ 'aergia', 'path', 'omni', 'keyn', 'dict' ], }
 >
