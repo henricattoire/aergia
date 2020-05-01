@@ -116,13 +116,13 @@ standalone mapping or integrate with your favorite completion plugin.
 
 Here, completion is called whenever <c-x><c-a> is pressed.
 <
-inoremap <c-x><c-a> <c-r>=expansions#completion#AergiaComplete()<cr>
+inoremap <c-x><c-a> <c-r>=aergia#completion#AergiaComplete()<cr>
 >
 
 Example of integration with mucomplete, a completion plugin.
 <
 let g:mucomplete#user_mappings = {
-      \ 'aergia' : "\<c-r>=expansions#completion#AergiaComplete()\<cr>", }
+      \ 'aergia' : "\<c-r>=aergia#completion#AergiaComplete()\<cr>", }
 let g:mucomplete#chains = {
   \ 'default' : [ 'aergia', 'path', 'omni', 'keyn', 'dict' ], }
 >
