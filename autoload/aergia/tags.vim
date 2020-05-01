@@ -15,9 +15,9 @@ let s:special = '$='
 " }}}
 " Tag Functions {{{
   " JumpTag {{{
-function! tags#JumpTag()
+function! aergia#tags#JumpTag()
   " if properites contains a named tag, process it
-  call tags#ProcessNamedTag()
+  call s:ProcessNamedTag()
 
   let l:n = util#GetCount(s:pattern) " number of tags left in the file
   if l:n != 0
@@ -28,16 +28,16 @@ function! tags#JumpTag()
       let s:properties["name"] = l:content
       let s:properties["position"] = getpos('.')
       " remove tag bounds and tell vim the select the name
-      call tags#ReplTag("normal! a" . s:properties["name"], "normal! i" . s:properties["name"])
+      call s:ReplTag("normal! a" . s:properties["name"], "normal! i" . s:properties["name"])
       execute "normal! v" . s:properties["position"][2] . "|\<c-g>"
     else
-      call tags#ReplTag("startinsert!", "startinsert")
+      call s:ReplTag("startinsert!", "startinsert")
     endif
   endif
 endfunction
   " }}}
   " ReplTag {{{
-function! tags#ReplTag(append, insert)
+function! s:ReplTag(append, insert)
   " append if this tag is the last set of chars on the line
   if getline('.')[col('.') - 1:] =~ '^' . s:pattern . '$'
     execute "normal! df" . s:closing[-1:]
@@ -49,7 +49,7 @@ function! tags#ReplTag(append, insert)
 endfunction
   " }}}
   " ProcessNamedTag {{{
-function! tags#ProcessNamedTag()
+function! s:ProcessNamedTag()
   " replace named tag with the cword on postion inside properties
   if s:properties["name"] !=? ''
     let l:current = getpos('.') " current position, so we can jump back later
@@ -63,7 +63,7 @@ function! tags#ProcessNamedTag()
 endfunction
   " }}}
   " ProcessCmds {{{
-function! tags#ProcessCmds() abort
+function! aergia#tags#ProcessCmds() abort
   " number of cmd tags to process
   let l:n = util#GetCount(s:cmds)
 
@@ -80,14 +80,14 @@ function! tags#ProcessCmds() abort
     " grab the name this cmd is attached to
     let l:name = matchstr(getline('.')[col('.') - 1:], s:special[-1] . '[^' . s:opening . s:closing . ']\+')
 
-    call tags#ReplTag("normal! a" . output , "normal! i" . output)
+    call s:ReplTag("normal! a" . output , "normal! i" . output)
     " replace potential named tags
     if l:name !=? ''
       " for now only cmds that have one word as output are supported
       execute "normal! b"
       let s:properties["name"] = l:name
       let s:properties["position"] = getpos('.')
-      call tags#ProcessNamedTag()
+      call s:ProcessNamedTag()
     endif
     let l:i += 1
   endwhile

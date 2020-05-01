@@ -1,8 +1,8 @@
-" commands (v0.2): custom commands used by aergia.
+" commands (v0.1): custom commands used by aergia.
 " author: Henri Cattoire.
 
 " AergiaAddSnippet {{{
-function! expansions#commands#AergiaAddSnippet(name)
+function! aergia#commands#AergiaAddSnippet(name)
   if a:name =~ '^[A-Za-z0-9]\+$'
     if &filetype != ''
       let l:type = inputlist(["Select type:", "1. " . &filetype, "2. global"])
@@ -20,17 +20,17 @@ function! expansions#commands#AergiaAddSnippet(name)
 endfunction
 " }}}
 " AergiaEditSnippet {{{
-function! expansions#commands#AergiaEditSnippet(name)
-  call expansions#commands#Do(a:name, "split $")
+function! aergia#commands#AergiaEditSnippet(name)
+  call s:Do(a:name, "split $")
 endfunction
 " }}}
 " AergiaRemoveSnippet {{{
-function! expansions#commands#AergiaRemoveSnippet(name)
-  call expansions#commands#Do(a:name, "call delete('$')")
+function! aergia#commands#AergiaRemoveSnippet(name)
+  call s:Do(a:name, "call delete('$')")
 endfunction
 " }}}
 " Do {{{
-function! expansions#commands#Do(name, action) abort
+function! s:Do(name, action) abort
   let l:options = globpath(g:aergia_snippets, '**/*'. a:name, 0, 1)
   if len(l:options) == 0
     echoerr "AergiaWarning: you don't have a '" . a:name . "' snippet"

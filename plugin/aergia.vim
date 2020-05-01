@@ -12,54 +12,14 @@ if !exists('g:aergia_key')
   let g:aergia_key = '<c-a>'
 endif
 " }}}
-" Find and Replace Snippets {{{
-  " FindSnippet {{{
-function! FindSnippet()
-  let l:key = expand('<cword>')
-  " look for a filetype specific snippet
-  let l:file = globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key)
-  " fall back on global snippet if necessary
-  if l:file == ''
-    let l:file = globpath(g:aergia_snippets, '**/' . l:key)
-  endif
-
-  if l:key != '' && l:file != '' && !isdirectory(l:file)
-    return l:file
-  endif
-endfunction
-  " }}}
-  " ReplSnippet {{{
-function! ReplSnippet()
-  let l:file = FindSnippet()
-  if l:file != ''
-    call IncludeFile(l:file)
-  else
-    call tags#JumpTag()
-  endif
-endfunction
-  " }}}
-  " IncludeFile {{{
-function! IncludeFile(file)
-  let l:insert = match(getline('.'), expand('<cword>') . "$")
-  execute "normal! b" . '"_dw'
-  execute "normal! "
-        \ . (l:insert != -1 ? "a" : "i")
-        \ . join(readfile(a:file), "\n")
-  " indent snippet
-  execute "normal! `[=v`]"
-  call tags#ProcessCmds() " replace all command tags before jumping to the first tag
-  call tags#JumpTag()
-endfunction
-  " }}}
-" }}}
 " Mappings {{{
-inoremap <silent> <Plug>(aergia) <esc>:call ReplSnippet()<cr>
-snoremap <silent> <Plug>(aergia) <esc>:call ReplSnippet()<cr>
+inoremap <silent> <Plug>(aergia) <esc>:call aergia#ReplSnippet()<cr>
+snoremap <silent> <Plug>(aergia) <esc>:call aergia#ReplSnippet()<cr>
 execute "imap " . g:aergia_key . " <Plug>(aergia)"
 execute "smap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
 " Commands {{{
-command -nargs=1 AergiaAddSnippet :call expansions#commands#AergiaAddSnippet(<f-args>)
-command -nargs=1 -complete=customlist,util#List AergiaEditSnippet :call expansions#commands#AergiaEditSnippet(<f-args>)
-command -nargs=1 -complete=customlist,util#List AergiaRemoveSnippet :call expansions#commands#AergiaRemoveSnippet(<f-args>)
+command -nargs=1 AergiaAddSnippet :call aergia#commands#AergiaAddSnippet(<f-args>)
+command -nargs=1 -complete=customlist,util#List AergiaEditSnippet   :call aergia#commands#AergiaEditSnippet(<f-args>)
+command -nargs=1 -complete=customlist,util#List AergiaRemoveSnippet :call aergia#commands#AergiaRemoveSnippet(<f-args>)
 " }}}

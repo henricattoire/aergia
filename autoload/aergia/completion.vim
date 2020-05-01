@@ -2,7 +2,7 @@
 " author: Henri Cattoire.
 
 " AergiaComplete {{{
-function! expansions#completion#AergiaComplete()
+function! aergia#completion#AergiaComplete()
   " find start of snippet and store the part of a potential snippet in base
   let l:line = getline('.')[:col('.')]
   let l:start = col('.') - 1
@@ -15,16 +15,16 @@ function! expansions#completion#AergiaComplete()
   let l:base = l:line[l:start:]
   let l:res = []
   if &filetype !=? ''
-    call expansions#completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:base . '*', 0, 1))
+    call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:base . '*', 0, 1))
   endif
-  call expansions#completion#AddItems(l:res, globpath(g:aergia_snippets, 'global_' . l:base . '*', 0, 1))
+  call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, 'global_' . l:base . '*', 0, 1))
 
   call complete(l:start + 1, l:res)
   return ''
 endfunction
 " }}}
 " AddItems {{{
-function! expansions#completion#AddItems(res, items)
+function! aergia#completion#AddItems(res, items)
   let l:i = 0
   while l:i < len(a:items)
     let l:snippet = split(substitute(a:items[l:i], '.*/', '', ''), '_')
