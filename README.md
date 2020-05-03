@@ -2,7 +2,7 @@
 
 aergia is a small plugin that helps you manage snippets.
 
-![demo](https://media.giphy.com/media/jtQ4AftuBrT1cuLiGU/source.gif)
+![demo](https://media.giphy.com/media/VIbtphTOTTF59Lyc1n/source.gif)
 
 ### installation
 
@@ -77,6 +77,5 @@ Filetype aware snippets are snippets that only work in files of the given filety
 a `def` snippet is created for python files (syntax: `filetype_name`). Filetype aware
 snippets have a priority over normal snippets.
 
-### other features (commands, completion, etc.)
-
-See [documentation](doc/aergia.txt).
+---
+For more information, see [the documentation](doc/aergia.txt).
