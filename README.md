@@ -1,6 +1,6 @@
 # aergia
 
-aergia is a small plugin that helps you manage snippets.
+[aergia](https://en.wikipedia.org/wiki/Aergia) is a small plugin that helps you manage snippets.
 
 ![demo](https://media.giphy.com/media/VIbtphTOTTF59Lyc1n/source.gif)
 
