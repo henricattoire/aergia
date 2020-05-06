@@ -16,7 +16,7 @@ let s:special = '$='
 " Tag Functions {{{
   " JumpTag {{{
 function! aergia#tags#JumpTag()
-  " if properites contains a named tag, process it
+  " if properties contains a named tag, process it
   call s:ProcessNamedTag()
 
   let l:n = util#GetCount(s:pattern) " number of tags left in the file

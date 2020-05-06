@@ -1,11 +1,23 @@
-*aergia*  *aergia.txt*  snippet manager: v0.2
+*aergia*  *aergia.txt*  snippet manager: v0.3
 
 Author:  Henri Cattoire
 
-1. Variables    |aergia-variables|
-2. Snippets     |aergia-snippets|
-3. Commands     |aergia-commands|
-4. Completion   |aergia-completion|
+1. Installation |aergia-installation|
+2. Variables    |aergia-variables|
+3. Snippets     |aergia-snippets|
+4. Commands     |aergia-commands|
+5. Completion   |aergia-completion|
+
+===============================================================================
+INSTALLATION                                              *aegria-installation*
+
+>
+" pathogen
+cd ~/.vim/bundle
+git clone https://github.com/henricattoire/aergia.git
+<
+
+Or use your favorite package manager to install `aergia`.
 
 ===============================================================================
 VARIABLES                                                    *aegria-variables*
@@ -38,6 +50,12 @@ SNIPPETS                                                      *aegria-snippets*
 Each snippet has its own file. The text used to invoke the snippet is the same
 as the filename. Snippets can (but don't have to) contain tags and you can jump
 between tags using the same key to invoke a snippet.
+
+>
+    def <{name}>():
+        """ <{name}>: <{+}> """
+        <{+}>
+<
 
 -------------------------------------------------------------------------------
                                                                *'snippet_tags'*
@@ -75,11 +93,11 @@ Example where a command tag is used to get the active filename.
 COMMANDS                                                      *aegria-commands*
 
 -------------------------------------------------------------------------------
-                                                              *'commands-info'*
-Because aergia is a snippet manager, it provides a simple way to manage the 
-snippets using commands. Now you can easily add, edit or remove snippets with 
+                                                       *'aergia-commands-info'*
+Because aergia is a snippet manager, it provides a simple way to manage your
+snippets using commands. You can easily add, edit or remove snippets with
 a couple of keystrokes. Commands like edit and remove also auto complete using
-the snippets already on the system (indicated with <tab>).
+the snippets already present on the system (indicated with <tab>).
 
 -------------------------------------------------------------------------------
                                                           *':AergiaAddSnippet'*
@@ -100,7 +118,7 @@ a snippet without leaving vim.
 <
 
 -------------------------------------------------------------------------------
-                                                        *'AergiaRemoveSnippet'*
+                                                       *':AergiaRemoveSnippet'*
 Removing unused snippets is easy with AergiaRemoveSnippet.
 >
     :AergiaRemoveSnippet snippet_na<tab>
@@ -110,16 +128,21 @@ Removing unused snippets is easy with AergiaRemoveSnippet.
 COMPLETION                                                  *aegria-completion*
 
 -------------------------------------------------------------------------------
-                                                            *'completion-info'*
-Other than that, aergia has a custom completion func, that you can use with a 
-standalone mapping or integrate with your favorite completion plugin.
+                                                 *'aergia-completion-function'*
+For snippet completion, aergia provides the bare minimum. It just has a
+completion function and it is up to you how (or if) you want to use it.
 
-Here, completion is called whenever <c-x><c-a> is pressed.
+Because this might be unknown territory for some people, here are some examples
+on how to use the provided function.
+
+Fitting the `vim` completion philosophy, you could create a distinct mapping to
+trigger snippet completion.
 >
 inoremap <c-x><c-a> <c-r>=aergia#completion#AergiaComplete()<cr>
 <
 
-Example of integration with mucomplete, a completion plugin.
+You can also tap into completion plugins that have support for custom completion
+functions, like mucomplete.
 >
 let g:mucomplete#user_mappings = {
       \ 'aergia' : "\<c-r>=aergia#completion#AergiaComplete()\<cr>", }
