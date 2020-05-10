@@ -19,9 +19,7 @@ function! aergia#tags#JumpTag()
   " if properties contains a named tag, process it
   call s:ProcessNamedTag()
 
-  let l:n = util#GetCount(s:pattern) " number of tags left in the file
-  if l:n != 0
-    silent! execute "normal! /" . s:pattern . "\<cr>"
+  if search(s:pattern, 'c')
     " if the tag is a named tag, store it
     let l:content = matchstr(getline('.')[col('.') - 1:], '[^' . s:opening . s:closing . ']\+')
     if l:content !=? s:typical
@@ -40,10 +38,10 @@ endfunction
 function! s:ReplTag(append, insert)
   " append if this tag is the last set of chars on the line
   if getline('.')[col('.') - 1:] =~ '^' . s:pattern . '$'
-    execute "normal! df" . s:closing[-1:]
+    execute "normal! " . '"_df' . s:closing[-1:]
     execute a:append
   else
-    execute "normal! df" . s:closing[-1:]
+    execute "normal! " .  '"_df' . s:closing[-1:]
     execute a:insert
   endif
 endfunction
@@ -64,13 +62,7 @@ endfunction
   " }}}
   " ProcessCmds {{{
 function! aergia#tags#ProcessCmds() abort
-  " number of cmd tags to process
-  let l:n = util#GetCount(s:cmds)
-
-  let l:i = 0
-  while l:i < l:n
-    silent! execute "normal! /" . s:cmds . "\<cr>"
-
+  while search(s:cmds, 'c')
     let l:cmd = matchstr(getline('.')[col('.') - 1:], '[^' . s:special . s:opening . s:closing . ']\+')
     try
       execute 'let output = ' . l:cmd
@@ -89,7 +81,6 @@ function! aergia#tags#ProcessCmds() abort
       let s:properties["position"] = getpos('.')
       call s:ProcessNamedTag()
     endif
-    let l:i += 1
   endwhile
 endfunction
   " }}}
