@@ -71,8 +71,7 @@ Named tags are tags that occur more than once in your snippet. When you have
 set a value for one of these tags, aergia will automatically replace all other
 tags with that name for you. Named tags are also default tags. So if you jump to
 a named tag and then you jump again, the tag will be replaced with whatever
-default (read: name) you gave the tag. It is recommended to keep named tags 
-quite basic (only use letters) and defaults tags can be more more complex.
+default (read: name) you gave the tag.
 >
     <{name}>
 <
@@ -81,7 +80,8 @@ quite basic (only use letters) and defaults tags can be more more complex.
                                                        *'snippet_command_tags'*
 Command tags are tags that get replaced by the returned value of the command
 (read: function). They get executed when you invoke a snippet, before jumping
-to the first tag. And they also support basic naming (see |snippet_named_tags|).
+to the first tag. Support for naming is limited, the name can only consist of
+one alphabetical characters.
 >
     <{$command}> or <{$command=name}>
 <
