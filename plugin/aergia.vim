@@ -1,6 +1,12 @@
 " aergia (v.0.3): small plugin that tries to act as a snippet manager.
 " author: Henri Cattoire.
 
+" don't do the work twice
+if exists('g:aergia_loaded')
+  finish
+endif
+let g:aergia_loaded = 1
+
 " Global Variables {{{
 if !exists('g:aergia_snippets')
   let g:aergia_snippets = expand('~/.vim/bundle/aergia/snippets')
