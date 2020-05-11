@@ -81,7 +81,7 @@ default (read: name) you gave the tag.
 Command tags are tags that get replaced by the returned value of the command
 (read: function). They get executed when you invoke a snippet, before jumping
 to the first tag. Support for naming is limited, the name can only consist of
-one alphabetical characters.
+alphabetical characters.
 >
     <{$command}> or <{$command=name}>
 <

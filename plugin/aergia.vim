@@ -1,11 +1,14 @@
 " aergia (v.0.3): small plugin that tries to act as a snippet manager.
 " author: Henri Cattoire.
 
-" don't do the work twice
+" provide means to prevent loading
 if exists('g:aergia_loaded')
   finish
 endif
 let g:aergia_loaded = 1
+" temporarly set cpo to vim default
+let s:save_cpo = &cpo
+set cpo&vim
 
 " Global Variables {{{
 if !exists('g:aergia_snippets')
@@ -29,3 +32,5 @@ command -nargs=1 AergiaAddSnippet :call aergia#commands#AergiaAddSnippet(<f-args
 command -nargs=1 -complete=customlist,util#List AergiaEditSnippet   :call aergia#commands#AergiaEditSnippet(<f-args>)
 command -nargs=1 -complete=customlist,util#List AergiaRemoveSnippet :call aergia#commands#AergiaRemoveSnippet(<f-args>)
 " }}}
+let &cpo = s:save_cpo
+unlet s:save_cpo
