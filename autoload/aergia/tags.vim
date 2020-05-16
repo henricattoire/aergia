@@ -50,9 +50,9 @@ endfunction
 function! s:ProcessNamedTag()
   " replace named tag with the cword on postion inside properties
   if s:properties["name"] !=? ''
-    let l:current = getpos('.') " current position, so we can jump back later
+    " BUG(repl): only replacements on one line will process properly
     silent! execute "%s/" . s:opening . s:properties["name"] . s:closing .  "/"
-          \ . getline(s:properties["position"][1])[s:properties["position"][2] - 1:l:current[2] - 1] . "/g"
+          \ . getline(s:properties["position"][1])[s:properties["position"][2] - 1:getpos('.')[2] - 1] . "/g"
     " reset named tag
     let s:properties["name"] = ''
   endif
