@@ -1,26 +1,42 @@
 *aergia*  *aergia.txt*  snippet manager: v0.3
+                              __
+_____    ____ _______   ____ |__|____
+\__  \ _/ __ \\_  __ \ / ___\|  |__  \
+ / __ \_  ___/_|  | \// /_/  \  |/ __ \_
+(____  /\___  /|__|   \___  /|__|____  /
+     \/     \/       /_____/         \/
 
 Author:  Henri Cattoire
 
-1. Installation |aergia-installation|
-2. Variables    |aergia-variables|
-3. Snippets     |aergia-snippets|
-4. Commands     |aergia-commands|
-5. Completion   |aergia-completion|
+1. Introduction |aergia-introduction|
+2. Installation |aergia-installation|
+3. Variables    |aergia-variables|
+4. Snippets     |aergia-snippets|
+5. Commands     |aergia-commands|
+6. Completion   |aergia-completion|
 
 ===============================================================================
-INSTALLATION                                              *aegria-installation*
+INTRODUCTION                                              *aergia-introduction*
 
+Did the vim community need another snippet manager? No. I created this because
+the other obvious options (UltiSnips, SnipMate) are way to complicated and
+feature rich, in my opinion. Of course, there is MiniSnip but this plugin isn't
+actively maintained and is missing some core featurs of a snippet manager, like
+a way to manage the snippets.
+
+===============================================================================
+INSTALLATION                                              *aergia-installation*
+
+With `pathogen`
 >
-" pathogen
-cd ~/.vim/bundle
-git clone https://github.com/henricattoire/aergia.git
+    cd ~/.vim/bundle
+    git clone https://github.com/henricattoire/aergia.git
 <
 
 Or use your favorite package manager to install `aergia`.
 
 ===============================================================================
-VARIABLES                                                    *aegria-variables*
+VARIABLES                                                    *aergia-variables*
 
 -------------------------------------------------------------------------------
                                                           *'g:aergia_snippets'*
@@ -42,8 +58,15 @@ change it in your `vimrc`.
     let g:aergia_key = '<c-j>'
 <
 
+-------------------------------------------------------------------------------
+                                                            *'g:aergia_expand'*
+Default: 0
+
+Enables automatic exspansion of snippets after completion when set to a truthy
+value. See |aergia-completion|.
+
 ===============================================================================
-SNIPPETS                                                      *aegria-snippets*
+SNIPPETS                                                      *aergia-snippets*
 
 -------------------------------------------------------------------------------
                                                              *'snippet_format'*
@@ -91,7 +114,7 @@ Example where a command tag is used to get the active filename.
 <
 
 ===============================================================================
-COMMANDS                                                      *aegria-commands*
+COMMANDS                                                      *aergia-commands*
 
 -------------------------------------------------------------------------------
                                                        *'aergia-commands-info'*
@@ -126,7 +149,7 @@ Removing unused snippets is easy with AergiaRemoveSnippet.
 <
 
 ===============================================================================
-COMPLETION                                                  *aegria-completion*
+COMPLETION                                                  *aergia-completion*
 
 -------------------------------------------------------------------------------
                                                  *'aergia-completion-function'*
@@ -139,14 +162,20 @@ on how to use the provided function.
 Fitting the `vim` completion philosophy, you could create a distinct mapping to
 trigger snippet completion.
 >
-inoremap <c-x><c-a> <c-r>=aergia#completion#AergiaComplete()<cr>
+    inoremap <c-x><c-a> <c-r>=aergia#completion#AergiaComplete()<cr>
 <
 
 You can also tap into completion plugins that have support for custom completion
 functions, like mucomplete.
 >
-let g:mucomplete#user_mappings = {
-      \ 'aergia' : "\<c-r>=aergia#completion#AergiaComplete()\<cr>", }
-let g:mucomplete#chains = {
-  \ 'default' : [ 'aergia', 'path', 'omni', 'keyn', 'dict' ], }
+    let g:mucomplete#user_mappings = {
+          \ 'aergia' : "\<c-r>=aergia#completion#AergiaComplete()\<cr>", }
+    let g:mucomplete#chains = {
+          \ 'default' : [ 'aergia', 'path', 'omni', 'keyn', 'dict' ], }
 <
+
+-------------------------------------------------------------------------------
+                                                              *'aergia-expand'*
+When |'g:aergia_expand'| is enabled, aergia creates an autocommand that tries
+to expand possible snippets upon |CompleteDone|. This option is obviously only
+useful combined with the |'aergia-completion-function'|.

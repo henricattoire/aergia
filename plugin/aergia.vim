@@ -20,6 +20,13 @@ endif
 if !exists('g:aergia_key')
   let g:aergia_key = '<c-a>'
 endif
+
+if exists('g:aergia_expand')
+  augroup aergia_expand
+    autocmd!
+    autocmd CompleteDone * call aergia#completion#AergiaExpand(v:completed_item)
+  augroup end
+endif
 " }}}
 " Mappings {{{
 inoremap <silent> <Plug>(aergia) <esc>:call aergia#ReplSnippet()<cr>

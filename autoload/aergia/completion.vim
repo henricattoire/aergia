@@ -3,23 +3,14 @@
 
 " AergiaComplete {{{
 function! aergia#completion#AergiaComplete()
-  " find start of snippet and store the part of a potential snippet in base
-  let l:line = getline('.')[:col('.')]
-  let l:start = col('.') - 1
-
-  while l:start > 0 && l:line[l:start - 1] =~ '[A-Za-z0-9]'
-    let l:start -= 1
-  endwhile
-
-  " search for filetype and global snippets matching base
-  let l:base = l:line[l:start:]
+  let l:bit = aergia#util#Make()
   let l:res = []
   if &filetype !=? ''
-    call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:base . '*', 0, 1))
+    call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:bit.base . '*', 0, 1))
   endif
-  call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, 'global_' . l:base . '*', 0, 1))
+  call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, 'global_' . l:bit.base . '*', 0, 1))
 
-  call complete(l:start + 1, l:res)
+  call complete(l:bit.start + 1, l:res)
   return ''
 endfunction
   " AddItems {{{
@@ -29,12 +20,24 @@ function! aergia#completion#AddItems(res, items)
     let l:snippet = split(substitute(a:items[l:i], '.*/', '', ''), '_')
     call add(a:res, {
           \ "word": l:snippet[1],
+          \ "kind": "[s]",
           \ "menu": "[" . l:snippet[0] . "]",
+          \ "dup": 1,
           \ "user_data": a:items[l:i], })
     let l:i += 1
   endwhile
 endfunction
 " }}}
+" }}}
+" AergiaExpand {{{
+function! aergia#completion#AergiaExpand(item)
+  " ensure that the item isn't empty and is indeed a snippet
+  if empty(a:item) || get(a:item, "kind", "none") !=# "[s]"
+    return
+  endif
+  call aergia#IncludeFile(a:item.word, a:item.user_data)
+  execute 'call feedkeys("\' . g:aergia_key . '", "i")'
+endfunction
 " }}}
 " ListSnippets {{{
 function! aergia#completion#ListSnippets(arg, line, pos)
