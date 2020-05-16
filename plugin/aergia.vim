@@ -29,8 +29,8 @@ execute "smap " . g:aergia_key . " <Plug>(aergia)"
 " }}}
 " Commands {{{
 command -nargs=1 AergiaAddSnippet :call aergia#commands#AergiaAddSnippet(<f-args>)
-command -nargs=1 -complete=customlist,util#List AergiaEditSnippet   :call aergia#commands#AergiaEditSnippet(<f-args>)
-command -nargs=1 -complete=customlist,util#List AergiaRemoveSnippet :call aergia#commands#AergiaRemoveSnippet(<f-args>)
+command -nargs=1 -complete=customlist,aergia#completion#ListSnippets AergiaEditSnippet   :call aergia#commands#AergiaEditSnippet(<f-args>)
+command -nargs=1 -complete=customlist,aergia#completion#ListSnippets AergiaRemoveSnippet :call aergia#commands#AergiaRemoveSnippet(<f-args>)
 " }}}
 let &cpo = s:save_cpo
 unlet s:save_cpo

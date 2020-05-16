@@ -22,8 +22,7 @@ function! aergia#completion#AergiaComplete()
   call complete(l:start + 1, l:res)
   return ''
 endfunction
-" }}}
-" AddItems {{{
+  " AddItems {{{
 function! aergia#completion#AddItems(res, items)
   let l:i = 0
   while l:i < len(a:items)
@@ -35,4 +34,16 @@ function! aergia#completion#AddItems(res, items)
     let l:i += 1
   endwhile
 endfunction
+" }}}
+" }}}
+" ListSnippets {{{
+function! aergia#completion#ListSnippets(arg, line, pos)
+  return s:Format('**/', a:arg)
+endfunction
+  " Format {{{
+function! s:Format(type, filter)
+  return map(filter(globpath(g:aergia_snippets, a:type . '*' . a:filter . '*', 0, 1), "!isdirectory(v:val)"),
+        \ "substitute(v:val, '.*/', '', 'g')")
+endfunction
+  " }}}
 " }}}
