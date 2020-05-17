@@ -67,17 +67,15 @@ function! aergia#tags#ProcessCmds() abort
       echoerr "AegriaError: couldn't execute command, " . l:cmd
     endtry
     " grab the name this cmd is attached to
-    let l:name = matchstr(getline('.')[col('.') - 1:], s:special[-1] . '[^' . s:opening . s:closing . ']\+')
+    let l:name = matchstr(getline('.')[col('.') - 1:], s:special[-1:] . '\zs[^' . s:opening . s:closing . ']\+')
 
     call s:ReplTag("normal! a" . output , "normal! i" . output)
     " replace potential named tags
     if l:name !=? ''
-      " for now only cmds that have one word as output are supported
-      execute "normal! b"
-      let s:properties["name"] = l:name
-      let s:properties["position"] = getpos('.')
-      call s:ProcessNamedTag()
+      " newline in output: https://stackoverflow.com/questions/71417/why-is-r-a-newline-for-vim
+      silent! execute "%s/" . s:opening . l:name . s:closing .  "/" . substitute(output, '\n', '\r', 'g') . "/g"
     endif
+    unlet output
   endwhile
 endfunction
   " }}}
