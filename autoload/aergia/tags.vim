@@ -48,7 +48,6 @@ endfunction
   " }}}
   " ProcessNamedTag {{{
 function! s:ProcessNamedTag()
-  " replace named tag with the cword on postion inside properties
   if s:properties["name"] !=? ''
     silent! execute "%s/" . s:opening . s:properties["name"] . s:closing .  "/"
           \ . getline(s:properties["position"][1])[s:properties["position"][2] - 1:getpos('.')[2] - 1] . "/g"
@@ -72,7 +71,7 @@ function! aergia#tags#ProcessCmds() abort
     call s:ReplTag("normal! a" . output , "normal! i" . output)
     " replace potential named tags
     if l:name !=? ''
-      " newline in output: https://stackoverflow.com/questions/71417/why-is-r-a-newline-for-vim
+      " when replacing \n is null byte and \r is actually newline (see :s%)
       silent! execute "%s/" . s:opening . l:name . s:closing .  "/" . substitute(output, '\n', '\r', 'g') . "/g"
     endif
     unlet output
