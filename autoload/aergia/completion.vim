@@ -6,7 +6,7 @@ function! aergia#completion#AergiaComplete()
   let l:bit = aergia#util#Make()
   let l:res = []
   if &filetype !=? ''
-    call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:bit.base . '*', 0, 1))
+    call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . l:bit.base . '*', 0, 1))
   endif
   call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, 'global_' . l:bit.base . '*', 0, 1))
 
@@ -27,7 +27,7 @@ function! aergia#completion#AddItems(res, items)
     let l:i += 1
   endwhile
 endfunction
-" }}}
+  " }}}
 " }}}
 " AergiaExpand {{{
 function! aergia#completion#AergiaExpand(item)

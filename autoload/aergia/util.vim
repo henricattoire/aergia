@@ -7,6 +7,11 @@ function! aergia#util#Wrap(s)
   return substitute(a:s, '.', { m -> '[' . m[0] . ']' }, 'g')
 endfunction
 " }}}
+" Type {{{
+function! aergia#util#Type()
+  return '\(' . join(split(&filetype, '\.'), '\|') . '\)'
+endfunction
+" }}}
 " Make {{{
 function! aergia#util#Make()
   " construct the potential identifier from cursor position

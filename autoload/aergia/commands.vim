@@ -4,17 +4,19 @@
 " AergiaAddSnippet {{{
 function! aergia#commands#AergiaAddSnippet(name)
   if a:name =~ '^[A-Za-z0-9]\+$'
-    if &filetype != ''
-      let l:type = inputlist(["Select type:", "1. " . &filetype, "2. global"])
+    let l:options = ["Select type:", "1. global"] + map(split(&filetype, '\.'), {i, val -> (i + 2) . ". " . val})
+    if len(l:options) == 2
+      let l:type = 1
     else
-      let l:type = 2
+      let l:type = inputlist(l:options)
     endif
     if l:type != 0
-      if l:type == 1 && !isdirectory(g:aergia_snippets . "/" . &filetype)
-        execute "silent !mkdir " . g:aergia_snippets . "/" . &filetype
+      let l:option = substitute(l:options[l:type], '^\d\+\. ', '', '')
+      if l:type > 1 && !isdirectory(g:aergia_snippets . "/" . l:option)
+        call system('mkdir ' . g:aergia_snippets . "/" . l:option)
       endif
       execute "split " . g:aergia_snippets . "/"
-            \ . (l:type == 2 ? "global_" . a:name : &filetype . "/" . &filetype . "_" . a:name)
+            \ . (l:type > 1 ? l:option . "/" : "") . l:option . '_' . a:name
     endif
   endif
 endfunction

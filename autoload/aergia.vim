@@ -6,7 +6,7 @@
 function! s:FindSnippet()
   let l:key = aergia#util#Make().base
   " look for a filetype specific snippet
-  let l:file = globpath(g:aergia_snippets, '**/' . &filetype . '[_]' . l:key)
+  let l:file = globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . l:key)
   " fall back on global snippet if necessary
   if l:file == ''
     let l:file = globpath(g:aergia_snippets, '**/' . l:key)
