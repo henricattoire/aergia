@@ -36,7 +36,8 @@ function! aergia#completion#AergiaExpand(item)
     return
   endif
   call aergia#IncludeFile(a:item.word, a:item.user_data)
-  execute 'call feedkeys("\' . g:aergia_key . '", "i")'
+  " simulate first jump
+  execute 'call feedkeys("\' . g:aergia_key . '")'
 endfunction
 " }}}
 " ListSnippets {{{

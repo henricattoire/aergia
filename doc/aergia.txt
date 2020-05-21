@@ -9,7 +9,7 @@ _____    ____ _______   ____ |__|____
 Author:  Henri Cattoire
 
 1. Introduction |aergia-introduction|
-2. Installation |aergia-installation|
+2. Requirements |aergia-requirements|
 3. Variables    |aergia-variables|
 4. Snippets     |aergia-snippets|
 5. Commands     |aergia-commands|
@@ -18,22 +18,16 @@ Author:  Henri Cattoire
 ===============================================================================
 INTRODUCTION                                              *aergia-introduction*
 
-Did the vim community need another snippet manager? No. I created this because
-the other obvious options (UltiSnips, SnipMate) are way to complicated and
-feature rich, in my opinion. Of course, there is MiniSnip but this plugin isn't
-actively maintained and is missing some core featurs of a snippet manager, like
-a way to manage the snippets.
+Did the vim need another snippet manager? No. I created this because the other
+obvious options (UltiSnips, SnipMate) are way to complicated and feature rich,
+in my opinion. Other, more minimal options, were either unmaintained or missed
+one feature I really wanted to have.
 
 ===============================================================================
-INSTALLATION                                              *aergia-installation*
+REQUIREMENTS                                              *aergia-requirements*
 
-With `pathogen`
->
-    cd ~/.vim/bundle
-    git clone https://github.com/henricattoire/aergia.git
-<
-
-Or use your favorite package manager to install `aergia`.
+Vim 8.0 or higher is recommended, as this was the version used to develop and
+test |aergia|.
 
 ===============================================================================
 VARIABLES                                                    *aergia-variables*

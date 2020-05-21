@@ -27,7 +27,7 @@ function! aergia#tags#JumpTag()
       let s:properties["position"] = getpos('.')
       " remove tag bounds and tell vim the select the name
       call s:ReplTag("normal! a" . s:properties["name"], "normal! i" . s:properties["name"])
-      execute "normal! v" . s:properties["position"][2] . "|\<c-g>"
+      execute "normal! " . s:properties["position"][2] . "|v" . col('.') . "|\<c-g>"
     else
       call s:ReplTag("startinsert!", "startinsert")
     endif
@@ -50,7 +50,7 @@ endfunction
 function! s:ProcessNamedTag()
   if s:properties["name"] !=? ''
     silent! execute "%s/" . s:opening . s:properties["name"] . s:closing .  "/"
-          \ . getline(s:properties["position"][1])[s:properties["position"][2] - 1:getpos('.')[2] - 1] . "/g"
+          \ . getline(s:properties["position"][1])[s:properties["position"][2] - 1:col('.') - 1] . "/g"
     " reset named tag
     let s:properties["name"] = ''
   endif
