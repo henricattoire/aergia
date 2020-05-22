@@ -46,7 +46,7 @@ function! aergia#completion#ListSnippets(arg, line, pos)
 endfunction
   " Format {{{
 function! s:Format(type, filter)
-  return map(filter(globpath(g:aergia_snippets, a:type . '*' . a:filter . '*', 0, 1), "!isdirectory(v:val)"),
+  return map(uniq(filter(globpath(g:aergia_snippets, a:type . '*' . a:filter . '*', 0, 1), "!isdirectory(v:val)")),
         \ "substitute(v:val, '.*/', '', 'g')")
 endfunction
   " }}}
