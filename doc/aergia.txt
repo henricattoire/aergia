@@ -56,7 +56,7 @@ change it in your `vimrc`.
                                                             *'g:aergia_expand'*
 Default: 0
 
-Enables automatic exspansion of snippets after completion when set to a truthy
+Enables automatic expansion of snippets after completion when set to a truthy
 value. See |aergia-completion|.
 
 ===============================================================================
