@@ -1,3 +1,3 @@
-public interface <{$expand('%:t:r')}> {
+public interface <{`expand('%:t:r')`}> {
 	<{+}>
 }

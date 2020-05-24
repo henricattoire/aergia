@@ -95,16 +95,16 @@ default (read: name) you gave the tag.
 
 -------------------------------------------------------------------------------
                                                        *'snippet_command_tags'*
-Command tags are tags that get replaced by the returned value of the command
-(read: function). They get executed when you invoke a snippet, before jumping
-to the first tag. Support for naming is limited, the name can only consist of
-alphabetical characters.
+Command tags are special because they get replaced by the return value of a
+command (read: function). They get executed when you invoke a snippet, before
+jumping to the first tag. Support for naming is limited, the name can only
+consist of alphabetical characters.
 >
-    <{$command}> or <{$command=name}>
+    <{`command`}> or <{`command`=name}>
 <
 Example where a command tag is used to get the active filename.
 >
-    <{$expand("%:t")}>
+    <{`expand("%:t")`}>
 <
 
 ===============================================================================
