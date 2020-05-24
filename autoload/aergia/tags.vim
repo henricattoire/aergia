@@ -10,7 +10,7 @@ let s:pattern = s:opening . '[^>]\+' . s:closing " prevent greedy match
 let s:properties = { "name": '', "position": 0, }
 " cmd tag
 let s:cmds = s:opening . '`.\+`=\?[A-Za-z]*' . s:closing
-let s:separator = '='
+let s:separator = '`='
 " }}}
 " Tag Functions {{{
   " JumpTag {{{
