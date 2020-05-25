@@ -9,7 +9,7 @@ let s:pattern = s:opening . '[^>]\+' . s:closing " prevent greedy match
 " named tag
 let s:properties = { "name": '', "position": 0, }
 " cmd tag
-let s:cmds = s:opening . '`.\{-1,}`=\?[A-Za-z]\{-}' . s:closing
+let s:cmds = s:opening . '`.\{-1,}`=\?[A-Za-z]*' . s:closing
 let s:separator = '`='
 " }}}
 " Tag Functions {{{
