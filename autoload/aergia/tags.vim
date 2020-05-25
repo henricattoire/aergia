@@ -9,8 +9,8 @@ let s:pattern = s:opening . '[^>]\+' . s:closing " prevent greedy match
 " named tag
 let s:properties = { "name": '', "position": 0, }
 " cmd tag
-let s:cmds = s:opening . '`.\+`=\?[A-Za-z]*' . s:closing
-let s:separator = '`='
+let s:cmds = s:opening . '`.\{-1,}`\(=[A-Za-z]\+' . s:closing . '\|' . s:closing . '\)'
+let s:separator = '='
 " }}}
 " Tag Functions {{{
   " JumpTag {{{
@@ -58,14 +58,14 @@ endfunction
   " ProcessCmds {{{
 function! aergia#tags#ProcessCmds() abort
   while search(s:cmds, 'c')
-    let l:cmd = matchstr(getline('.')[col('.') - 1:], '`\zs.\+\ze`')
+    let l:cmd = matchstr(getline('.')[col('.') - 1:], '`\zs.\{-1,}\ze`\(=\|' . s:closing . '\)')
     try
       execute 'let output = ' . l:cmd
     catch
       echoerr "AegriaError: couldn't execute command, " . l:cmd
     endtry
     " grab the name this cmd is attached to
-    let l:name = matchstr(getline('.')[col('.') - 1:], s:separator . '\zs[A-Za-z]\+')
+    let l:name = matchstr(getline('.')[col('.') - 1:], s:separator . '\zs[A-Za-z]\+\ze' . s:closing)
 
     call s:ReplTag("normal! a" . output , "normal! i" . output)
     " replace potential named tags
