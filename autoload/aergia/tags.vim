@@ -9,7 +9,7 @@ let s:pattern = s:opening . '[^>]\+' . s:closing " prevent greedy match
 " named tag
 let s:properties = { "name": '', "position": 0, }
 " cmd tag
-let s:cmds = s:opening . '`.\+`=\?[A-Za-z]*' . s:closing
+let s:cmds = s:opening . '`.\{-1,}`=\?[A-Za-z]\{-}' . s:closing
 let s:separator = '`='
 " }}}
 " Tag Functions {{{
@@ -58,7 +58,7 @@ endfunction
   " ProcessCmds {{{
 function! aergia#tags#ProcessCmds() abort
   while search(s:cmds, 'c')
-    let l:cmd = matchstr(getline('.')[col('.') - 1:], '`\zs.\+\ze`')
+    let l:cmd = matchstr(getline('.')[col('.') - 1:], '`\zs.\{-1,}\ze`')
     try
       execute 'let output = ' . l:cmd
     catch
