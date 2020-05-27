@@ -25,3 +25,14 @@ function! aergia#util#Make()
   return { "base": l:line[l:start:], "start": l:start, }
 endfunction
 " }}}
+" Prep {{{
+function! aergia#util#Prep(snippet)
+  return map(a:snippet, function('s:Space'))
+endfunction
+  " Space {{{
+function! s:Space(k, s)
+  " a sane version, at least for inserting snippets, of '=' in normal mode
+  return repeat(' ', indent('.')) . substitute(a:s, "\t", repeat(' ', shiftwidth()), "g")
+endfunction
+  " }}}
+" }}}
