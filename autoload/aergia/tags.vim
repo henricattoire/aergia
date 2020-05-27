@@ -48,10 +48,12 @@ endfunction
   " ProcessNamedTag {{{
 function! s:ProcessNamedTag()
   if s:properties["name"] !=? ''
+    let l:pos = getpos('.')
     silent! execute "%s/" . s:opening . s:properties["name"] . s:closing .  "/"
           \ . getline(s:properties["position"][1])[s:properties["position"][2] - 1:col('.') - 1] . "/g"
-    " reset named tag
+    " reset named tag and position
     let s:properties["name"] = ''
+    call setpos('.', l:pos)
   endif
 endfunction
   " }}}
