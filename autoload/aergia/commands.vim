@@ -3,6 +3,7 @@
 
 " AergiaAddSnippet {{{
 function! aergia#commands#AergiaAddSnippet(name)
+  " (IM): support more than just alphanumeric characters
   if a:name =~ '^[A-Za-z0-9]\+$'
     let l:options = ["Select type:", "1. global"] + map(split(&filetype, '\.'), {i, val -> (i + 2) . ". " . val})
     if len(l:options) == 2

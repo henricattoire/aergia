@@ -1,8 +1,7 @@
 " aergia (v.0.3): transform keys into snippets.
 " author: Henri Cattoire.
 
-" Find and Replace Snippets {{{
-  " FindSnippet {{{
+" FindSnippet {{{
 function! s:FindSnippet()
   let l:key = aergia#util#Make().base
   " look for a filetype specific snippet
@@ -12,12 +11,12 @@ function! s:FindSnippet()
     let l:file = globpath(g:aergia_snippets, '**/' . l:key)
   endif
 
-  if l:key != '' && l:file != '' && !isdirectory(l:file)
+  if !empty(l:key) && filereadable(l:file)
     return { "key": l:key, "file" : l:file, }
   endif
 endfunction
-  " }}}
-  " ReplSnippet {{{
+" }}}
+" ReplSnippet {{{
 function! aergia#ReplSnippet()
   let l:info = s:FindSnippet()
   if !empty(l:info)
@@ -25,8 +24,8 @@ function! aergia#ReplSnippet()
   endif
   call aergia#tags#JumpTag()
 endfunction
-  " }}}
-  " IncludeFile {{{
+" }}}
+" IncludeFile {{{
 function! aergia#IncludeFile(key, file)
   let l:snippet = aergia#util#Prep(readfile(a:file))
   " cursor position is one to the left if the snippet wasn't auto expanded
@@ -38,7 +37,7 @@ function! aergia#IncludeFile(key, file)
 
   call aergia#tags#ProcessCmds() " replace all command tags before jumping to the first tag
 endfunction
-    " Ins {{{
+  " Ins {{{
 function! s:Ins(snippet)
   let [l:before, l:after] = [strpart(getline('.'), 0, col('.') - 1), strpart(getline('.'), col('.') - 1)]
   let l:lnum = line('.')
@@ -53,6 +52,5 @@ function! s:Ins(snippet)
   call setline(l:lnum, a:snippet[0])
   call append(l:lnum, a:snippet[1:])
 endfunction
-    " }}}
   " }}}
 " }}}

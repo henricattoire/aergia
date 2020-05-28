@@ -1,4 +1,4 @@
-" completion (v.0.1): completion function.
+" completion (v.0.1): completion functions.
 " author: Henri Cattoire.
 
 " AergiaComplete {{{
@@ -32,7 +32,7 @@ endfunction
 " AergiaExpand {{{
 function! aergia#completion#AergiaExpand(item)
   " ensure that the item isn't empty and is indeed a snippet
-  if empty(a:item) || get(a:item, "kind", "none") !=# "[s]"
+  if empty(a:item) || get(a:item, "kind") !=# "[s]"
     return
   endif
   call aergia#IncludeFile(a:item.word, a:item.user_data)
@@ -47,7 +47,7 @@ endfunction
   " Format {{{
 function! s:Format(type, filter)
   " remove duplicates and directories from potentially matching snippets
-  return map(uniq(filter(globpath(g:aergia_snippets, a:type . '*' . a:filter . '*', 0, 1), "!isdirectory(v:val)")),
+  return map(uniq(filter(globpath(g:aergia_snippets, a:type . '*' . a:filter . '*', 0, 1), "filereadable(v:val)")),
         \ "substitute(v:val, '.*/', '', 'g')")
 endfunction
   " }}}

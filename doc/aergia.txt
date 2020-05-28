@@ -45,7 +45,7 @@ Location where aergia looks for snippets. You can change it in your `vimrc`.
                                                                *'g:aergia_key'*
 Default: '<c-a>'
 
-Specifies the key used to trigger aegria. Setting this to <tab> when you have
+Specifies the key used to trigger aergia. Setting this to <tab> when you have
 other plugins like supertab installed, can cause unexpected behaviour. You can
 change it in your `vimrc`.
 >
@@ -115,8 +115,8 @@ COMMANDS                                                      *aergia-commands*
                                                        *'aergia-commands-info'*
 Because aergia is a snippet manager, it provides a simple way to manage your
 snippets using commands. You can easily add, edit or remove snippets with
-a couple of keystrokes. Commands like edit and remove also auto complete using
-the snippets already present on the system (indicated with <tab>).
+a couple of keystrokes. Some commands also provide tab completion using the
+snippets already present on your system (indicated with <tab>).
 
 -------------------------------------------------------------------------------
                                                           *':AergiaAddSnippet'*

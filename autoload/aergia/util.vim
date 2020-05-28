@@ -18,6 +18,7 @@ function! aergia#util#Make()
   let l:line = getline('.')[:col('.') - 1]
   let l:start = col('.') - 1
 
+  " (IM): support more than just alphanumeric characters
   while l:start > 0 && l:line[l:start - 1] =~ '[A-Za-z0-9]'
     let l:start -= 1
   endwhile
