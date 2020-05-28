@@ -32,7 +32,9 @@ function! aergia#IncludeFile(key, file)
   " cursor position is one to the left if the snippet wasn't auto expanded
   execute "normal! " . (len(a:key) + (getline('.')[col('.') - 1] == a:key[-1:] ? -1 : 0)) . "h" . len(a:key) . '"_x'
   " insert snippet
-  call s:Ins(l:snippet)
+  if !empty(l:snippet)
+    call s:Ins(l:snippet)
+  endif
 
   call aergia#tags#ProcessCmds() " replace all command tags before jumping to the first tag
 endfunction
@@ -41,10 +43,10 @@ function! s:Ins(snippet)
   let [l:before, l:after] = [strpart(getline('.'), 0, col('.') - 1), strpart(getline('.'), col('.') - 1)]
   let l:lnum = line('.')
   " keep text before and after the key (if any)
-  if l:before != '' && l:before !~ '^\s\+$'
+  if !empty(l:before) && l:before !~ '^\s\+$'
     let a:snippet[0] = l:before . (l:after == ' ' ? ' ' : '') . a:snippet[0]
   endif
-  if l:after != '' && l:after !~ '^\s\+$'
+  if !empty(l:after) && l:after !~ '^\s\+$'
     let a:snippet[-1] = a:snippet[-1] . l:after
   endif
 
