@@ -7,8 +7,8 @@ function! s:FindSnippet()
   " look for a filetype specific snippet
   let l:file = globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . l:key)
   " fall back on global snippet if necessary
-  if l:file == ''
-    let l:file = globpath(g:aergia_snippets, '**/' . l:key)
+  if empty(l:file)
+    let l:file = globpath(g:aergia_snippets, '**/global_' . l:key)
   endif
 
   if !empty(l:key) && filereadable(l:file)
@@ -28,27 +28,28 @@ endfunction
 " IncludeFile {{{
 function! aergia#IncludeFile(key, file)
   let l:snippet = aergia#util#Prep(readfile(a:file))
-  " cursor position is one to the left if the snippet wasn't auto expanded
-  execute "normal! " . (len(a:key) + (getline('.')[col('.') - 1] == a:key[-1:] ? -1 : 0)) . "h" . len(a:key) . '"_x'
+  let l:curline = getline('.')
+  " obtain part before and after the key
+  let [l:before, l:after] = [matchstr(l:curline, '^\zs.*\ze' . a:key), matchstr(l:curline, '^.*' . a:key . '\zs.*\ze$')]
+  " remove key (one char less if the snippet wasn't auto expanded)
+  execute "normal! " . (len(a:key) + (l:curline[col('.') - 1] == a:key[-1:] ? -1 : 0)) . "h" . len(a:key) . '"_x'
   " insert snippet
   if !empty(l:snippet)
-    call s:Ins(l:snippet)
+    call s:Ins(l:snippet, l:before, l:after)
   endif
-
   call aergia#tags#ProcessCmds() " replace all command tags before jumping to the first tag
 endfunction
   " Ins {{{
-function! s:Ins(snippet)
-  let [l:before, l:after] = [strpart(getline('.'), 0, col('.') - 1), strpart(getline('.'), col('.') - 1)]
-  let l:lnum = line('.')
+function! s:Ins(snippet, before, after)
   " keep text before and after the key (if any)
-  if !empty(l:before) && l:before !~ '^\s\+$'
-    let a:snippet[0] = l:before . (l:after == ' ' ? ' ' : '') . a:snippet[0]
+  if !empty(a:before) && a:before !~ '^\s\+$'
+    let a:snippet[0] = a:before . a:snippet[0]
   endif
-  if !empty(l:after) && l:after !~ '^\s\+$'
-    let a:snippet[-1] = a:snippet[-1] . l:after
+  if !empty(a:after) && a:after !~ '^\s\+$'
+    let a:snippet[-1] = a:snippet[-1] . a:after
   endif
 
+  let l:lnum = line('.')
   call setline(l:lnum, a:snippet[0])
   call append(l:lnum, a:snippet[1:])
 endfunction
