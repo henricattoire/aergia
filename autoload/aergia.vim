@@ -27,17 +27,18 @@ endfunction
 " }}}
 " IncludeFile {{{
 function! aergia#IncludeFile(key, file)
-  let l:snippet = aergia#util#Prep(readfile(a:file))
   let l:curline = getline('.')
   " obtain part before and after the key
   let [l:before, l:after] = [matchstr(l:curline, '^\zs.*\ze' . a:key), matchstr(l:curline, '^.*' . a:key . '\zs.*\ze$')]
+  " prepare snippet to be inserted
+  let l:snippet = aergia#util#Prep(readfile(a:file), !empty(l:before) && l:before !~ '^\s\+$')
   " remove key (one char less if the snippet wasn't auto expanded)
   execute "normal! " . (len(a:key) + (l:curline[col('.') - 1] == a:key[-1:] ? -1 : 0)) . "h" . len(a:key) . '"_x'
   " insert snippet
   if !empty(l:snippet)
     call s:Ins(l:snippet, l:before, l:after)
+    call aergia#tags#ProcessCmds() " replace all command tags before jumping to the first tag
   endif
-  call aergia#tags#ProcessCmds() " replace all command tags before jumping to the first tag
 endfunction
   " Ins {{{
 function! s:Ins(snippet, before, after)

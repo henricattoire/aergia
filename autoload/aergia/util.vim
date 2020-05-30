@@ -27,11 +27,14 @@ function! aergia#util#Make()
 endfunction
 " }}}
 " Prep {{{
-function! aergia#util#Prep(snippet)
-  return map(a:snippet, function('s:Space'))
+function! aergia#util#Prep(snippet, before)
+  return map(a:snippet, function('s:Space', [a:before]))
 endfunction
   " Space {{{
-function! s:Space(k, s)
+function! s:Space(before, k, s)
+  if a:k == 0 && a:before
+    return a:s
+  endif
   " a sane version, at least for inserting snippets, of '=' in normal mode
   return repeat(' ', indent('.')) . substitute(a:s, "\t", repeat(' ', shiftwidth()), "g")
 endfunction
