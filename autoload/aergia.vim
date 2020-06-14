@@ -1,4 +1,4 @@
-" aergia (v.0.3): transform keys into snippets.
+" aergia (v.0.4): transform keys into snippets.
 " author: Henri Cattoire.
 
 " FindSnippet {{{
@@ -28,11 +28,10 @@ endfunction
 " IncludeFile {{{
 function! aergia#IncludeFile(key, file)
   let l:curline = getline('.')
-  " obtain part before and after the key
+  " preserve real characters before and after key
   let [l:before, l:after] = [matchstr(l:curline, '^\zs.*\ze' . a:key), matchstr(l:curline, '^.*' . a:key . '\zs.*\ze$')]
-  " prepare snippet to be inserted
+  " prepare snippet to be inserted and remove key
   let l:snippet = aergia#util#Prep(readfile(a:file), !empty(l:before) && l:before !~ '^\s\+$')
-  " remove key (one char less if the snippet wasn't auto expanded)
   execute "normal! " . (len(a:key) + (l:curline[col('.') - 1] == a:key[-1:] ? -1 : 0)) . "h" . len(a:key) . '"_x'
   " insert snippet
   if !empty(l:snippet)

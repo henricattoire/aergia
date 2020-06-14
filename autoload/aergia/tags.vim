@@ -1,11 +1,11 @@
-" tags (v.0.3): tag related functions.
+" tags (v.0.4): tag related functions.
 " author: Henri Cattoire.
 
 " Tag Variables {{{
 let s:opening = '<{'
-let s:typical = '+' " content of a 'typical' (not special) tag
+let s:typical = '+'
 let s:closing = '}>'
-let s:pattern = s:opening . '[^>]\+' . s:closing " prevent greedy match
+let s:pattern = s:opening . '.\{-1,}' . s:closing
 " named tag
 let s:properties = { "name": '', "position": 0, }
 " cmd tag
@@ -35,12 +35,14 @@ endfunction
   " }}}
   " ReplTag {{{
 function! s:ReplTag(append, insert)
+  let [l:oldline, l:colnr] = [getline('.'), col('.')]
+  let l:newline = (l:colnr != 1 ? l:oldline[0:l:colnr - 2] : '')
+        \ . substitute(l:oldline[l:colnr - 1:], s:pattern, '', '')
+  call setline(line('.'), l:newline)
   " append if this tag is the last set of chars on the line
-  if getline('.')[col('.') - 1:] =~ '^' . s:pattern . '$'
-    execute "normal! " . '"_df' . s:closing[-1:]
+  if l:newline[l:colnr - 1:] =~ '^\s*$'
     execute a:append
   else
-    execute "normal! " .  '"_df' . s:closing[-1:]
     execute a:insert
   endif
 endfunction
