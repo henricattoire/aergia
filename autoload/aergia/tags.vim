@@ -20,7 +20,7 @@ function! aergia#tags#JumpTag()
 
   if search(s:pattern, 'c')
     " if the tag is a named tag, store it
-    let l:content = matchstr(getline('.')[col('.') - 1:], '[^' . s:opening . s:closing . ']\+')
+    let l:content = matchstr(getline('.')[col('.') - 1:], s:opening . '\zs.\{-1,}\ze' . s:closing)
     if l:content !=? s:typical
       let s:properties["name"] = l:content
       let s:properties["position"] = getpos('.')
