@@ -1,4 +1,4 @@
-" aergia (v.0.3): small plugin that tries to act as a snippet manager.
+" aergia (v.0.4): a small, straightforward snippet manager.
 " author: Henri Cattoire.
 
 " provide means to prevent loading
