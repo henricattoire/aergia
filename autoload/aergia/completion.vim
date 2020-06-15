@@ -1,4 +1,4 @@
-" completion (v.0.2): completion functions.
+" completion (v.1.1): completion functions.
 " author: Henri Cattoire.
 
 " AergiaComplete {{{

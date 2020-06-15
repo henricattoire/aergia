@@ -1,4 +1,4 @@
-*aergia*  *aergia.txt*  snippet manager: v1.0
+*aergia*  *aergia.txt*  snippet manager: v.1.1
                               __
 _____    ____ _______   ____ |__|____
 \__  \ _/ __ \\_  __ \ / ___\|  |__  \
@@ -14,6 +14,7 @@ Author:  Henri Cattoire
 4. Snippets     |aergia-snippets|
 5. Commands     |aergia-commands|
 6. Completion   |aergia-completion|
+7. Integration  |aergia-integration|
 
 ===============================================================================
 INTRODUCTION                                              *aergia-introduction*
@@ -34,7 +35,7 @@ VARIABLES                                                    *aergia-variables*
 
 -------------------------------------------------------------------------------
                                                           *'g:aergia_snippets'*
-Default: $HOME . '/.vim/bundle/aergia/snippets'
+Default: $HOME . '/.vim/snippets'
 
 Location where aergia looks for snippets. You can change it in your `vimrc`.
 >
@@ -45,9 +46,7 @@ Location where aergia looks for snippets. You can change it in your `vimrc`.
                                                                *'g:aergia_key'*
 Default: '<c-a>'
 
-Specifies the key used to trigger aergia. Setting this to <tab> when you have
-other plugins like supertab installed, can cause unexpected behaviour. You can
-change it in your `vimrc`.
+Specifies the key used to trigger aergia. You can change it in your `vimrc`.
 >
     let g:aergia_key = '<c-j>'
 <
@@ -161,7 +160,7 @@ trigger snippet completion.
 <
 
 You can also tap into completion plugins that have support for custom completion
-functions, like mucomplete.
+functions, like MUcomplete.
 >
     let g:mucomplete#user_mappings = {
           \ 'aergia' : "\<c-r>=aergia#completion#AergiaComplete()\<cr>", }
@@ -174,3 +173,25 @@ functions, like mucomplete.
 When |'g:aergia_expand'| is enabled, aergia creates an autocommand that tries
 to expand possible snippets upon |CompleteDone|. This option is obviously only
 useful combined with the |'aergia-completion-function'|.
+
+===============================================================================
+INTEGRATION                                                *aergia-integration*
+
+-------------------------------------------------------------------------------
+                                                            *'can-aergia-move'*
+To integrate well with other plugins that use the same mapping in insert mode as
+aergia, there is a function you can use to check if aergia can move.
+
+Move returns a boolean that indicates whether aergia is able to jump to a tag
+or can expand the current key as a snippet.
+>
+    call aergia#util#Move()
+<
+
+Use the tab key for both MUcomplete (with automatic completion) and aergia.
+>
+    imap <c-f> <plug>(MUcompleteFwd)
+    imap <expr> <tab> pumvisible() ? "\<c-f>" :
+          \ aergia#util#Move() ? "\<c-a>" :  "\<tab>"
+    smap <tab> <c-a>
+<

@@ -1,4 +1,4 @@
-" commands (v0.1): custom commands used by aergia.
+" commands (v1.1): custom commands used by aergia.
 " author: Henri Cattoire.
 
 " AergiaAddSnippet {{{
@@ -14,7 +14,7 @@ function! aergia#commands#AergiaAddSnippet(name)
     if l:type != 0
       let l:option = substitute(l:options[l:type], '^\d\+\. ', '', '')
       if l:type > 1 && !isdirectory(g:aergia_snippets . "/" . l:option)
-        call system('mkdir ' . g:aergia_snippets . "/" . l:option)
+        call mkdir(g:aergia_snippets . "/" . l:option, "p")
       endif
       execute "split " . g:aergia_snippets . "/"
             \ . (l:type > 1 ? l:option . "/" : "") . l:option . '_' . a:name

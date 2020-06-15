@@ -1,6 +1,11 @@
-" util (v.0.1): utility functions.
+" util (v.1.1): utility functions.
 " author: Henri Cattoire.
 
+" Move {{{
+function aergia#util#Move()
+  return aergia#tags#CanJump() || aergia#FindSnippet()
+endfunction
+" }}}
 " Wrap {{{
 function! aergia#util#Wrap(s)
   " make string safe to be used in a regex, wrap each char in brackets
