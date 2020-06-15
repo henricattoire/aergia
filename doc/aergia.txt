@@ -1,4 +1,4 @@
-*aergia*  *aergia.txt*  snippet manager: v0.3
+*aergia*  *aergia.txt*  snippet manager: v1.0
                               __
 _____    ____ _______   ____ |__|____
 \__  \ _/ __ \\_  __ \ / ___\|  |__  \

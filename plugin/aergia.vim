@@ -1,4 +1,4 @@
-" aergia (v.0.4): a small, straightforward snippet manager.
+" aergia (v.1.0): a small, straightforward snippet manager.
 " author: Henri Cattoire.
 
 " provide means to prevent loading

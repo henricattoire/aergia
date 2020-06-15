@@ -1,14 +1,16 @@
-" completion (v.0.1): completion functions.
+" completion (v.0.2): completion functions.
 " author: Henri Cattoire.
 
 " AergiaComplete {{{
 function! aergia#completion#AergiaComplete()
   let l:bit = aergia#util#Make()
   let l:res = []
-  if &filetype !=? ''
-    call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . l:bit.base . '*', 0, 1))
+  if !empty(&filetype)
+    call aergia#completion#AddItems(l:res,
+          \ globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . l:bit.base . '*', 0, 1))
   endif
-  call aergia#completion#AddItems(l:res, globpath(g:aergia_snippets, 'global_' . l:bit.base . '*', 0, 1))
+  call aergia#completion#AddItems(l:res,
+        \ globpath(g:aergia_snippets, 'global_' . l:bit.base . '*', 0, 1))
 
   call complete(l:bit.start + 1, l:res)
   return ''
