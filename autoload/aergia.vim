@@ -1,8 +1,8 @@
-" aergia (v.0.4): transform keys into snippets.
+" aergia (v.1.1): transform keys into snippets.
 " author: Henri Cattoire.
 
 " FindSnippet {{{
-function! s:FindSnippet()
+function! aergia#FindSnippet()
   let l:key = aergia#util#Make().base
   " look for a filetype specific snippet
   let l:file = globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . l:key)
@@ -12,15 +12,15 @@ function! s:FindSnippet()
   endif
 
   if !empty(l:key) && filereadable(l:file)
-    return { "key": l:key, "file" : l:file, }
+    let s:info = { "key": l:key, "file" : l:file, }
+    return 1
   endif
 endfunction
 " }}}
 " ReplSnippet {{{
 function! aergia#ReplSnippet()
-  let l:info = s:FindSnippet()
-  if !empty(l:info)
-    call aergia#IncludeFile(l:info.key, l:info.file)
+  if aergia#FindSnippet()
+    call aergia#IncludeFile(s:info.key, s:info.file)
   endif
   call aergia#tags#JumpTag()
 endfunction

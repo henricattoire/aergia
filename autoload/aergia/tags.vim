@@ -1,4 +1,4 @@
-" tags (v.0.4): tag related functions.
+" tags (v.1.1): tag related functions.
 " author: Henri Cattoire.
 
 " Tag Variables {{{
@@ -13,6 +13,11 @@ let s:cmds = s:opening . '`.\{-1,}`\(=[A-Za-z]\+' . s:closing . '\|' . s:closing
 let s:separator = '='
 " }}}
 " Tag Functions {{{
+  " CanJump {{{
+function! aergia#tags#CanJump()
+  return search(s:pattern, 'cn')
+endfunction
+  " }}}
   " JumpTag {{{
 function! aergia#tags#JumpTag()
   " if properties contains a named tag, process it

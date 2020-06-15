@@ -1,4 +1,4 @@
-" aergia (v.1.0): a small, straightforward snippet manager.
+" aergia (v.1.1): a small, straightforward snippet manager.
 " author: Henri Cattoire.
 
 " provide means to prevent loading
@@ -12,7 +12,7 @@ set cpo&vim
 
 " Global Variables {{{
 if !exists('g:aergia_snippets')
-  let g:aergia_snippets = expand('~/.vim/bundle/aergia/snippets')
+  let g:aergia_snippets = expand('~/.vim/snippets')
 else
   let g:aergia_snippets = expand(g:aergia_snippets)
 endif
