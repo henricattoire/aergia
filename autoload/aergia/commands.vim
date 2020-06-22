@@ -2,7 +2,7 @@
 " author: Henri Cattoire.
 
 " AergiaAddSnippet {{{
-function! aergia#commands#AergiaAddSnippet(name)
+function! aergia#commands#AergiaAddSnippet(name) abort
   " (IM): support more than just alphanumeric characters
   if a:name =~ '^[A-Za-z0-9]\+$'
     let l:options = ["Select type:", "1. global"] + map(split(&filetype, '\.'), {i, val -> (i + 2) . ". " . val})
@@ -23,12 +23,12 @@ function! aergia#commands#AergiaAddSnippet(name)
 endfunction
 " }}}
 " AergiaEditSnippet {{{
-function! aergia#commands#AergiaEditSnippet(name)
+function! aergia#commands#AergiaEditSnippet(name) abort
   call s:Do(a:name, "split $")
 endfunction
 " }}}
 " AergiaRemoveSnippet {{{
-function! aergia#commands#AergiaRemoveSnippet(name)
+function! aergia#commands#AergiaRemoveSnippet(name) abort
   call s:Do(a:name, "call delete('$')")
 endfunction
 " }}}

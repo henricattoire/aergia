@@ -2,7 +2,7 @@
 " author: Henri Cattoire.
 
 " AergiaComplete {{{
-function! aergia#completion#AergiaComplete()
+function! aergia#completion#AergiaComplete() abort
   let l:bit = aergia#util#Make()
   let l:res = []
   if !empty(&filetype)
@@ -16,7 +16,7 @@ function! aergia#completion#AergiaComplete()
   return ''
 endfunction
   " AddItems {{{
-function! aergia#completion#AddItems(res, items)
+function! aergia#completion#AddItems(res, items) abort
   let l:i = 0
   while l:i < len(a:items)
     let l:snippet = split(substitute(a:items[l:i], '.*/', '', ''), '_')
@@ -32,7 +32,7 @@ endfunction
   " }}}
 " }}}
 " AergiaExpand {{{
-function! aergia#completion#AergiaExpand(item)
+function! aergia#completion#AergiaExpand(item) abort
   " ensure that the item isn't empty and is indeed a snippet
   if empty(a:item) || get(a:item, "kind") !~ "s"
     return
@@ -43,7 +43,7 @@ function! aergia#completion#AergiaExpand(item)
 endfunction
 " }}}
 " ListSnippets {{{
-function! aergia#completion#ListSnippets(arg, line, pos)
+function! aergia#completion#ListSnippets(arg, line, pos) abort
   return map(uniq(filter(globpath(g:aergia_snippets, '**/*' . a:arg . '*', 0, 1), "filereadable(v:val)")),
         \ "substitute(v:val, '.*/', '', 'g')")
 endfunction
