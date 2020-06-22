@@ -7,8 +7,8 @@ let s:typical = '+'
 let s:closing = '}>'
 let s:pattern = s:opening . '.\{-1,}' . s:closing
 " cmd tag
-let s:cmds = s:opening . '`.\{-1,}`\(=[A-Za-z]\+' . s:closing . '\|' . s:closing . '\)'
 let s:separator = '='
+let s:cmds = s:opening . '`.\{-1,}`\(' . s:separator . '[A-Za-z]\+\)\?' . s:closing
 " }}}
 " Tag Functions {{{
   " CanJump {{{
@@ -64,7 +64,7 @@ endfunction
   " ProcessCmds {{{
 function! aergia#tags#ProcessCmds() abort
   while search(s:cmds, 'c')
-    let l:cmd = matchstr(getline('.')[col('.') - 1:], '`\zs.\{-1,}\ze`\(=\|' . s:closing . '\)')
+    let l:cmd = matchstr(getline('.')[col('.') - 1:], '`\zs.\{-1,}\ze`\(' . s:separator . '\|' . s:closing . '\)')
     try
       execute 'let output = ' . l:cmd
     catch
