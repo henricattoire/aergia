@@ -22,7 +22,7 @@ INTRODUCTION                                              *aergia-introduction*
 Did vim need another snippet manager? No. I made this plugin because the other
 obvious options (UltiSnips, SnipMate) are way to complicated and feature rich,
 in my opinion. Other, more minimal options, were either unmaintained or missed
-one feature I really wanted to have.
+just that one feature I really wanted to have.
 
 ===============================================================================
 REQUIREMENTS                                              *aergia-requirements*

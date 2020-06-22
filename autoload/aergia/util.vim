@@ -2,26 +2,26 @@
 " author: Henri Cattoire.
 
 " Move {{{
-function aergia#util#Move()
+function aergia#util#Move() abort
   return aergia#tags#CanJump() || aergia#FindSnippet()
 endfunction
 " }}}
 " Wrap {{{
-function! aergia#util#Wrap(s)
+function! aergia#util#Wrap(s) abort
   " make string safe to be used in a regex, wrap each char in brackets
   return substitute(a:s, '.', { m -> '[' . m[0] . ']' }, 'g')
 endfunction
 " }}}
 " Type {{{
-function! aergia#util#Type()
+function! aergia#util#Type() abort
   return '\(' . join(split(&filetype, '\.'), '\|') . '\)'
 endfunction
 " }}}
 " Make {{{
-function! aergia#util#Make()
+function! aergia#util#Make() abort
   " construct the potential identifier from cursor position
-  let l:line = getline('.')[:col('.') - 1]
   let l:start = col('.') - 1
+  let l:line = getline('.')[:l:start]
 
   " (IM): support more than just alphanumeric characters
   while l:start > 0 && l:line[l:start - 1] =~ '[A-Za-z0-9]'
@@ -32,11 +32,11 @@ function! aergia#util#Make()
 endfunction
 " }}}
 " Prep {{{
-function! aergia#util#Prep(snippet, before)
+function! aergia#util#Prep(snippet, before) abort
   return map(a:snippet, function('s:Space', [a:before]))
 endfunction
   " Space {{{
-function! s:Space(before, k, s)
+function! s:Space(before, k, s) abort
   if a:k == 0 && a:before
     return a:s
   endif
