@@ -10,11 +10,12 @@ Author:  Henri Cattoire
 
 1. Introduction |aergia-introduction|
 2. Requirements |aergia-requirements|
-3. Variables    |aergia-variables|
-4. Snippets     |aergia-snippets|
-5. Commands     |aergia-commands|
-6. Completion   |aergia-completion|
-7. Integration  |aergia-integration|
+3. Usage        |aergia-usage|
+4. Variables    |aergia-variables|
+5. Snippets     |aergia-snippets|
+6. Commands     |aergia-commands|
+7. Completion   |aergia-completion|
+8. Integration  |aergia-integration|
 
 ===============================================================================
 INTRODUCTION                                              *aergia-introduction*
@@ -31,13 +32,26 @@ Vim 8.0 or higher is recommended, as this was the version used to develop and
 test |aergia|.
 
 ===============================================================================
+USAGE                                                            *aergia-usage*
+
+Using |aergia| is relatively straightforward. However it is possible to use the
+plugin in two completely different ways. Or interchangeably. First of all, this
+plugin can be controlled with user mappings to both insert snippets and jump
+around in them. Secondly, it is possible to do those exact same things but only
+with |aergia-commands|. It is up to you to find out which of these options suits
+you best. I would describe the first way as the more traditional and intuitive
+and the second way as the more experimental way that opens up the possibilty for
+the plugin to be used with the oh so popular fuzzy finding plugins and more.
+
+===============================================================================
 VARIABLES                                                    *aergia-variables*
 
 -------------------------------------------------------------------------------
                                                           *'g:aergia_snippets'*
 Default: $HOME . '/.vim/snippets'
 
-Location where aergia looks for snippets. You can change it in your `vimrc`.
+Location where |aergia| looks for snippets. Wrapped around |expand()| so special
+characters (~ to name one) and environment variables get expanded.
 >
     let g:aergia_snippets = '/path'
 <
@@ -46,10 +60,19 @@ Location where aergia looks for snippets. You can change it in your `vimrc`.
                                                                *'g:aergia_key'*
 Default: '<c-a>'
 
-Specifies the key used to trigger aergia. You can change it in your `vimrc`.
+Key used to trigger |aergia| into expanding snippets and to jump from tag to tag.
 >
     let g:aergia_key = '<c-j>'
 <
+
+-------------------------------------------------------------------------------
+                                                          *'g:aergia_mappings'*
+Default: 1
+
+Provide means to disable each mapping involving the |'g:aergia_key'|. Internal
+mappings (i.e. |<Plug>| mappings) aren't affected by this option but can be
+disabled using |no_plugin_maps|. Note: Using |no_plugin_maps| is sufficient if
+you want to disable both normal and internal mappings.
 
 -------------------------------------------------------------------------------
                                                             *'g:aergia_expand'*
@@ -76,7 +99,7 @@ your snippets using literal tabs because this makes them versatile.
 
 -------------------------------------------------------------------------------
                                                                *'snippet_tags'*
-Tags are points in your snippet where you can put some text. In aergia, normal
+Tags are points in your snippet where you can put some text. In |aergia|, normal
 tags just have a `+` between the start and the end of the tag.
 >
     <{+}>
@@ -85,7 +108,7 @@ tags just have a `+` between the start and the end of the tag.
 -------------------------------------------------------------------------------
                                                          *'snippet_named_tags'*
 Named tags are tags that occur more than once in your snippet. When you have
-set a value for one of these tags, aergia will automatically replace all other
+set a value for one of these tags, |aergia| will automatically replace all other
 tags with that name for you. Named tags are also default tags. So if you jump to
 a named tag and then you jump again, the tag will be replaced with whatever
 default (read: name) you gave the tag.
@@ -112,14 +135,13 @@ COMMANDS                                                      *aergia-commands*
 
 -------------------------------------------------------------------------------
                                                        *'aergia-commands-info'*
-Because aergia is a snippet manager, it provides a simple way to manage your
-snippets using commands. You can easily add, edit or remove snippets with
-a couple of keystrokes. Some commands also provide tab completion using the
-snippets already present on your system (indicated with <tab>).
+With the use of user commands, |aergia| provides a way to handle your snippets
+and deploy them in the field. Some commands provide tab completion using the
+snippets already present on your system and are indicated with <tab>.
 
 -------------------------------------------------------------------------------
                                                           *':AergiaAddSnippet'*
-This command allows you to interactively add snippets to aergia without having
+This command allows you to interactively add snippets to |aergia| without having
 to leave vim. The snippet can be specific to the filetype of the file you're
 currently working in, or you can choose to make it a global snippet.
 >
@@ -142,12 +164,23 @@ Removing unused snippets is easy with AergiaRemoveSnippet.
     :AergiaRemoveSnippet snippet_na<tab>
 <
 
+-------------------------------------------------------------------------------
+                                                       *':AergiaInsertSnippet'*
+Insert snippets without having to use a mapping.
+>
+    :AergiaInsertSnippet snippet_na<tab>
+<
+
+-------------------------------------------------------------------------------
+                                                             *':AergiaJumpTag'*
+Jump around in snippets without using a mapping.
+
 ===============================================================================
 COMPLETION                                                  *aergia-completion*
 
 -------------------------------------------------------------------------------
                                                  *'aergia-completion-function'*
-For snippet completion, aergia provides the bare minimum. It just has a
+For snippet completion, |aergia| provides the bare minimum. It just has a
 completion function and it is up to you how (or if) you want to use it.
 
 Because this might be unknown territory for some people, here are some examples
@@ -170,7 +203,7 @@ functions, like MUcomplete.
 
 -------------------------------------------------------------------------------
                                                               *'aergia-expand'*
-When |'g:aergia_expand'| is enabled, aergia creates an autocommand that tries
+When |'g:aergia_expand'| is enabled, |aergia| creates an autocommand that tries
 to expand possible snippets upon |CompleteDone|. This option is obviously only
 useful combined with the |'aergia-completion-function'|.
 
@@ -180,15 +213,15 @@ INTEGRATION                                                *aergia-integration*
 -------------------------------------------------------------------------------
                                                             *'can-aergia-move'*
 To integrate well with other plugins that use the same mapping in insert mode as
-aergia, there is a function you can use to check if aergia can move.
+|aergia|, there is a function you can use to check if |aergia| can move.
 
-Move returns a boolean that indicates whether aergia is able to jump to a tag
+Move returns a boolean that indicates whether |aergia| is able to jump to a tag
 or can expand the current key as a snippet.
 >
     call aergia#util#Move()
 <
 
-Use the tab key for both MUcomplete (with automatic completion) and aergia.
+Use the tab key for both MUcomplete (with automatic completion) and |aergia|.
 >
     imap <c-f> <plug>(MUcompleteFwd)
     imap <expr> <tab> pumvisible() ? "\<c-f>" :

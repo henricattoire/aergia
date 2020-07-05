@@ -32,6 +32,12 @@ function! aergia#commands#AergiaRemoveSnippet(name) abort
   call s:Do(a:name, "call delete('$')")
 endfunction
 " }}}
+" AergiaInsertSnippet {{{
+function! aergia#commands#AergiaInsertSnippet(name) abort
+  call s:Do(a:name, "call aergia#IncludeFile('', '$')")
+  call aergia#tags#JumpTag()
+endfunction
+" }}}
 " Do {{{
 function! s:Do(name, action) abort
   let l:options = globpath(g:aergia_snippets, '**/*'. a:name, 0, 1)
