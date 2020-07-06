@@ -68,7 +68,7 @@ function! aergia#tags#ProcessCmds() abort
     try
       execute 'let output = ' . l:cmd
     catch
-      echoerr "AergiaError: couldn't execute command, " . l:cmd
+      echoerr "AergiaError: unable to execute '" . l:cmd . "'."
     endtry
     " grab the name this cmd is attached to
     let l:name = matchstr(getline('.')[col('.') - 1:], s:separator . '\zs[A-Za-z]\+\ze' . s:closing)
