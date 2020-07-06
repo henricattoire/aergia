@@ -44,7 +44,8 @@ endfunction
 " }}}
 " ListSnippets {{{
 function! aergia#completion#ListSnippets(arg, line, pos) abort
-  return map(uniq(filter(globpath(g:aergia_snippets, '**/*' . a:arg . '*', 0, 1), "filereadable(v:val)")),
+  return map(uniq(filter(
+        \ globpath(g:aergia_snippets, '**/*' . a:arg . '*', 0, 1), "filereadable(v:val)")),
         \ "substitute(v:val, '.*/', '', 'g')")
 endfunction
 " }}}

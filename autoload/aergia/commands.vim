@@ -30,13 +30,14 @@ endfunction
 " AergiaRemoveSnippet {{{
 function! aergia#commands#AergiaRemoveSnippet(name) abort
   call s:Do(a:name, "call delete('$')")
+  echo "AergiaSuccess: deleted '" . a:name . "'."
 endfunction
 " }}}
 " Do {{{
 function! s:Do(name, action) abort
   let l:options = globpath(g:aergia_snippets, '**/*'. a:name, 0, 1)
   if len(l:options) == 0
-    echoerr "AergiaWarning: you don't have a '" . a:name . "' snippet"
+    echoerr "AergiaWarning: you don't have a '" . a:name . "' snippet."
   elseif len(l:options) == 1
     execute substitute(a:action, '[$]', l:options[0], '')
   endif
