@@ -1,45 +1,46 @@
-" commands (v1.1): custom commands used by aergia.
+" commands (v1.2): custom commands used by aergia.
 " author: Henri Cattoire.
 
 " AergiaAddSnippet {{{
 function! aergia#commands#AergiaAddSnippet(name) abort
-  " (IM): support more than just alphanumeric characters
-  if a:name =~ '^[A-Za-z0-9]\+$'
-    let l:options = ["Select type:", "1. global"] + map(split(&filetype, '\.'), {i, val -> (i + 2) . ". " . val})
-    if len(l:options) == 2
-      let l:type = 1
-    else
-      let l:type = inputlist(l:options)
-    endif
+  if a:name =~ '^[#!A-Za-z0-9_]\+$'
+    let l:options = ["Select type:", "1. global"] + map(split(&filetype, '\.'), '(v:key + 2) . ". " . v:val')
+    let l:type = (len(l:options) == 2) ? 1 : inputlist(l:options)
     if l:type != 0
-      let l:option = substitute(l:options[l:type], '^\d\+\. ', '', '')
-      if l:type > 1 && !isdirectory(g:aergia_snippets . "/" . l:option)
-        call mkdir(g:aergia_snippets . "/" . l:option, "p")
+      let l:pick = substitute(l:options[l:type], '^\d\+\. ', '', '')
+      if l:type > 1 && !isdirectory(g:aergia_snippets . "/" . l:pick)
+        call mkdir(g:aergia_snippets . "/" . l:pick, "p")
       endif
-      execute "split " . g:aergia_snippets . "/"
-            \ . (l:type > 1 ? l:option . "/" : "") . l:option . '_' . a:name
+      let l:path = g:aergia_snippets . "/" . (l:type > 1 ? l:pick . "/" : "") . l:pick . '_' . fnameescape(a:name)
+      execute "split " . l:path
     endif
   endif
 endfunction
 " }}}
 " AergiaEditSnippet {{{
 function! aergia#commands#AergiaEditSnippet(name) abort
-  call s:Do(a:name, "split $")
+  let l:path = s:FindFile(a:name)
+  if !empty(l:path)
+    execute "split " . fnameescape(l:path)
+  endif
 endfunction
 " }}}
 " AergiaRemoveSnippet {{{
 function! aergia#commands#AergiaRemoveSnippet(name) abort
-  call s:Do(a:name, "call delete('$')")
-  echo "AergiaSuccess: deleted '" . a:name . "'."
+  let l:path = s:FindFile(a:name)
+  if !empty(l:path)
+    execute "call delete('" . l:path . "')"
+    echo "AergiaSuccess: deleted '" . a:name . "'."
+  endif
 endfunction
 " }}}
-" Do {{{
-function! s:Do(name, action) abort
-  let l:options = globpath(g:aergia_snippets, '**/*'. a:name, 0, 1)
-  if len(l:options) == 0
+" FindFile {{{
+function! s:FindFile(name) abort
+  let l:results = globpath(g:aergia_snippets, '**/*'. a:name, 0, 1)
+  if len(l:results) == 0
     echoerr "AergiaWarning: you don't have a '" . a:name . "' snippet."
-  elseif len(l:options) == 1
-    execute substitute(a:action, '[$]', l:options[0], '')
+    return ""
   endif
+  return l:results[0]
 endfunction
 " }}}

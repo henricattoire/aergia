@@ -1,4 +1,4 @@
-*aergia*  *aergia.txt*  snippet manager: v.1.1
+*aergia*  *aergia.txt*  snippet manager: v.1.2
                               __
 _____    ____ _______   ____ |__|____
 \__  \ _/ __ \\_  __ \ / ___\|  |__  \
@@ -20,15 +20,15 @@ Author:  Henri Cattoire
 INTRODUCTION                                              *aergia-introduction*
 
 Did vim need another snippet manager? No. I made this plugin because the other
-obvious options (UltiSnips, SnipMate) are way to complicated and feature rich,
+obvious options (UltiSnips, SnipMate) are far too dependent and feature rich,
 in my opinion. Other, more minimal options, were either unmaintained or missed
-just that one feature I really wanted to have.
+one feature I really wanted to have.
 
 ===============================================================================
 REQUIREMENTS                                              *aergia-requirements*
 
 Vim 8.0 or higher is recommended, as this was the version used to develop and
-test |aergia|.
+test |aergia| (but |aergia| should work from version 7.01).
 
 ===============================================================================
 VARIABLES                                                    *aergia-variables*
@@ -44,12 +44,12 @@ special characters (like ~) and environment variables get expanded.
 <
 
 -------------------------------------------------------------------------------
-                                                               *'g:aergia_key'*
+                                                           *'g:aergia_trigger'*
 Default: '<c-a>'
 
 Key used to trigger |aergia| into expanding snippets and jumping around in them.
 >
-    let g:aergia_key = '<c-j>'
+    let g:aergia_trigger = '<c-j>'
 <
 
 -------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ SNIPPETS                                                      *aergia-snippets*
 Each snippet has its own file. The text used to invoke the snippet is the same
 as the filename. Snippets can (but don't have to) contain tags and you can jump
 between tags using the same key to invoke a snippet. It is recommended to write
-your snippets using literal tabs because this makes them versatile.
+your snippets using literal tabs because this makes them versatile (default).
 
 >
     def <{name}>():
@@ -178,20 +178,20 @@ useful combined with the |'aergia-completion-function'|.
 INTEGRATION                                                *aergia-integration*
 
 -------------------------------------------------------------------------------
-                                                            *'can-aergia-move'*
+                                                           *'is-aergia-useful'*
 To integrate well with other plugins that use the same mapping in insert mode as
-|aergia|, there is a function you can use to check if |aergia| can move.
+|aergia|, there is a function you can use to check if |aergia| can be useful.
 
-Move returns a boolean that indicates whether |aergia| is able to jump to a tag
-or can expand the current key as a snippet.
+Useful returns a boolean that indicates whether |aergia| is able to jump to a
+tag or can expand the current key as a snippet.
 >
-    call aergia#util#Move()
+    call aergia#Useful()
 <
 
 Use the tab key for both MUcomplete (with automatic completion) and |aergia|.
 >
     imap <c-f> <plug>(MUcompleteFwd)
     imap <expr> <tab> pumvisible() ? "\<c-f>" :
-          \ aergia#util#Move() ? "\<c-a>" :  "\<tab>"
+          \ aergia#Useful() ? "\<c-a>" :  "\<tab>"
     smap <tab> <c-a>
 <
