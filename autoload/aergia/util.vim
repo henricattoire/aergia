@@ -1,47 +1,52 @@
-" util (v.1.1): utility functions.
+" util (v.1.2): utility functions.
 " author: Henri Cattoire.
 
-" Move {{{
-function aergia#util#Move() abort
-  return aergia#tags#CanJump() || aergia#FindSnippet()
-endfunction
-" }}}
-" Wrap {{{
-function! aergia#util#Wrap(s) abort
-  " make string safe to be used in a regex, wrap each char in brackets
-  return substitute(a:s, '.', { m -> '[' . m[0] . ']' }, 'g')
-endfunction
-" }}}
-" Type {{{
-function! aergia#util#Type() abort
-  return '\(' . join(split(&filetype, '\.'), '\|') . '\)'
-endfunction
-" }}}
-" Make {{{
-function! aergia#util#Make() abort
-  " construct the potential identifier from cursor position
+" Key {{{
+function! aergia#util#Key() abort
+  " construct key starting from cursor
   let l:start = col('.') - 1
   let l:line = getline('.')[:l:start]
 
-  " (IM): support more than just alphanumeric characters
-  while l:start > 0 && l:line[l:start - 1] =~ '[A-Za-z0-9]'
+  while l:start > 0 && l:line[l:start - 1] =~ '[#!A-Za-z0-9_]'
     let l:start -= 1
   endwhile
 
   return { "base": l:line[l:start:], "start": l:start, }
 endfunction
 " }}}
-" Prep {{{
-function! aergia#util#Prep(snippet, before) abort
-  return map(a:snippet, function('s:Space', [a:before]))
+" Type {{{
+function! aergia#util#Type() abort
+  " put filetype(s) in regex format
+  return '\(' . join(split(&filetype, '\.'), '\|') . '\)'
 endfunction
-  " Space {{{
-function! s:Space(before, k, s) abort
-  if a:k == 0 && a:before
-    return a:s
+" }}}
+" Context {{{
+function! aergia#util#Context(key) abort
+  let l:line = getline('.')
+  " get context around a given key(word)
+  let l:ahead = matchstr(l:line, '^\zs.*\ze' . a:key)
+  let l:after = matchstr(l:line, '^.*' . a:key . '\zs.*\ze$')
+  return {
+        \ 'ahead': [ l:ahead !~ '^\s\+$\|^$', l:ahead ],
+        \ 'after': [ l:after !~ '^\s\+$\|^$', l:after ],
+        \ }
+endfunction
+" }}}
+" Indent {{{
+function! aergia#util#Indent(not_first, i, line) abort
+  if a:i == 0 && a:not_first
+    return a:line
   endif
-  " a sane version, at least for inserting snippets, of '=' in normal mode
-  return repeat(' ', indent('.')) . substitute(a:s, "\t", repeat(' ', shiftwidth()), "g")
+
+  let l:line = a:line
+  if &expandtab
+    let l:line = substitute(l:line, "\t", s:GetIndent(), 'g')
+  endif
+  return repeat(s:GetIndent(), indent('.') / (&shiftwidth ? &shiftwidth : &tabstop)) . l:line
+endfunction
+  " GetIndent {{{
+function! s:GetIndent() abort
+  return !&expandtab ? "\t" : repeat(' ', &shiftwidth ? &shiftwidth : &tabstop)
 endfunction
   " }}}
 " }}}

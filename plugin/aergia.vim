@@ -1,7 +1,7 @@
-" aergia (v.1.1): a small, straightforward snippet manager.
+" aergia (v.1.2): a small, straightforward snippet manager.
 " author: Henri Cattoire.
 
-if exists('g:aergia_loaded')
+if exists('g:aergia_loaded') || v:version < 701 || &compatible
   finish
 endif
 let g:aergia_loaded = 1
@@ -9,15 +9,8 @@ let g:aergia_loaded = 1
 let s:save_cpo = &cpo
 set cpo&vim
 " Global Variables {{{
-if !exists('g:aergia_snippets')
-  let g:aergia_snippets = expand('~/.vim/snippets')
-else
-  let g:aergia_snippets = expand(g:aergia_snippets)
-endif
-
-if !exists('g:aergia_key')
-  let g:aergia_key = '<c-a>'
-endif
+let g:aergia_snippets = expand(get(g:, 'aergia_snippets', '~/.vim/snippets'))
+let g:aergia_trigger  = get(g:, 'aergia_trigger', '<c-a>')
 
 if get(g:, 'aergia_expand', 0)
   augroup aergia_expand
@@ -27,10 +20,10 @@ if get(g:, 'aergia_expand', 0)
 endif
 " }}}
 " Mappings {{{
-inoremap <silent> <Plug>(aergia) <esc>:call aergia#ReplSnippet()<cr>
-snoremap <silent> <Plug>(aergia) <esc>:call aergia#ReplSnippet()<cr>
-execute "imap " . g:aergia_key . " <Plug>(aergia)"
-execute "smap " . g:aergia_key . " <Plug>(aergia)"
+inoremap <silent> <Plug>(aergia) <esc>:call aergia#Respond()<cr>
+snoremap <silent> <Plug>(aergia) <esc>:call aergia#Respond()<cr>
+execute "imap " . g:aergia_trigger . " <Plug>(aergia)"
+execute "smap " . g:aergia_trigger . " <Plug>(aergia)"
 " }}}
 " Commands {{{
 command -nargs=1 AergiaAddSnippet :call aergia#commands#AergiaAddSnippet(<f-args>)

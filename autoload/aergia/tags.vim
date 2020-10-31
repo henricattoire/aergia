@@ -1,85 +1,82 @@
-" tags (v.1.1): tag related functions.
+" tags (v.1.2): tag related functions.
 " author: Henri Cattoire.
 
 " Tag Variables {{{
 let s:opening = '<{'
-let s:typical = '+'
 let s:closing = '}>'
 let s:pattern = s:opening . '.\{-1,}' . s:closing
-" cmd tag
-let s:separator = '='
-let s:cmds = s:opening . '`.\{-1,}`\(' . s:separator . '[A-Za-z]\+\)\?' . s:closing
+  " Default
+let s:default = '+'
+  " Command
+let s:sep = '='
+let s:command = s:opening . '`.\{-1,}`\(' . s:sep . '[A-Za-z]\+\)\?' . s:closing
 " }}}
 " Tag Functions {{{
-  " CanJump {{{
+  " Can Aergia Jump? {{{
 function! aergia#tags#CanJump() abort
   return search(s:pattern, 'cn')
 endfunction
   " }}}
-  " JumpTag {{{
-function! aergia#tags#JumpTag() abort
+  " Jump {{{
+function! aergia#tags#Jump() abort
   " if properties contains a named tag, process it
-  call s:ProcessNamedTag()
+  call s:ProcessName()
 
   if search(s:pattern, 'c')
     " if the tag is a named tag, store it
     let l:content = matchstr(getline('.')[col('.') - 1:], s:opening . '\zs.\{-1,}\ze' . s:closing)
-    if l:content !=? s:typical
+    if l:content !=? s:default
       let s:properties = { "name": l:content, "position": getpos('.'), }
-      " remove tag bounds and tell vim the select the name
-      call s:ReplTag("normal! a" . s:properties["name"], "normal! i" . s:properties["name"])
+      " replace tag and select name
+      call s:Replace("normal! a" . s:properties["name"], "normal! i" . s:properties["name"])
       execute "normal! " . s:properties["position"][2] . "|v" . col('.') . "|\<c-g>"
     else
-      call s:ReplTag("startinsert!", "startinsert")
+      call s:Replace("startinsert!", "startinsert")
     endif
   endif
 endfunction
   " }}}
-  " ReplTag {{{
-function! s:ReplTag(append, insert) abort
-  let [l:oldline, l:col] = [getline('.'), col('.')]
-  let l:newline = (l:col != 1 ? l:oldline[0:l:col - 2] : '')
-        \ . substitute(l:oldline[l:col - 1:], s:pattern, '', '')
-  call setline(line('.'), l:newline)
+  " Replace {{{
+function! s:Replace(append, insert) abort
   " append if this tag is the last set of chars on the line
-  if l:newline[l:col - 1:] =~ '^\s*$'
-    execute a:append
-  else
-    execute a:insert
-  endif
+  execute (s:Remove()[col('.') - 1:] =~ '^\s*$' ? a:append : a:insert)
 endfunction
   " }}}
-  " ProcessNamedTag {{{
-function! s:ProcessNamedTag() abort
+  " Remove {{{
+function! s:Remove() abort
+  let [l:line, l:col] = [getline('.'), col('.')]
+  let l:tagless = (l:col != 1 ? l:line[0:l:col - 2] : '') . substitute(l:line[l:col - 1:], s:pattern, '', '')
+  call setline(line('.'), l:tagless)
+  return l:tagless
+endfunction
+  " }}}
+  " ProcessName {{{
+function! s:ProcessName() abort
   if exists('s:properties')
     let l:pos = getpos('.')
     silent! execute "%s/" . s:opening . s:properties["name"] . s:closing .  "/"
           \ . getline(s:properties["position"][1])[s:properties["position"][2] - 1:col('.') - 1] . "/g"
-    " reset named tag and position
     unlet s:properties
     call setpos('.', l:pos)
   endif
 endfunction
   " }}}
-  " ProcessCmds {{{
-function! aergia#tags#ProcessCmds() abort
-  while search(s:cmds, 'c')
-    let l:cmd = matchstr(getline('.')[col('.') - 1:], '`\zs.\{-1,}\ze`\(' . s:separator . '\|' . s:closing . '\)')
-    try
-      execute 'let output = ' . l:cmd
-    catch
-      echoerr "AergiaError: unable to execute '" . l:cmd . "'."
-    endtry
-    " grab the name this cmd is attached to
-    let l:name = matchstr(getline('.')[col('.') - 1:], s:separator . '\zs[A-Za-z]\+\ze' . s:closing)
+  " ProcessCommands {{{
+function! aergia#tags#ProcessCommands() abort
+  while search(s:command, 'c')
+    let [l:line, l:col] = [getline('.'), col('.') - 1]
+    " grab and execute command
+    let l:cmd = matchstr(l:line[l:col:], '`\zs.\{-1,}\ze`\(' . s:sep . '\|' . s:closing . '\)')
+    let l:out = eval(cmd)
+    " grab id (read: name) this cmd is attached to
+    let l:id = matchstr(l:line[l:col:], s:sep . '\zs[A-Za-z]\+\ze' . s:closing)
 
-    call s:ReplTag("normal! a" . output , "normal! i" . output)
+    call s:Replace("normal! a" . out, "normal! i" . out)
     " replace potential named tags
-    if l:name !=? ''
+    if !empty(l:id)
       " when replacing \n is null byte and \r is actually newline (see :s%)
-      silent! execute "%s/" . s:opening . l:name . s:closing .  "/" . substitute(output, '\n', '\r', 'g') . "/g"
+      silent! execute "%s/" . s:opening . l:id . s:closing .  "/" . substitute(out, '\n', '\r', 'g') . "/g"
     endif
-    unlet output
   endwhile
 endfunction
   " }}}
