@@ -46,6 +46,7 @@ function! aergia#util#Indent(not_first, i, line) abort
 endfunction
   " GetIndent {{{
 function! s:GetIndent() abort
+  " see https://github.com/hrsh7th/vim-vsnip/blob/master/autoload/vsnip/indent.vim#L5
   return !&expandtab ? "\t" : repeat(' ', &shiftwidth ? &shiftwidth : &tabstop)
 endfunction
   " }}}
