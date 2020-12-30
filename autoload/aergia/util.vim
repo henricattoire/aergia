@@ -22,6 +22,7 @@ endfunction
 " }}}
 " Context {{{
 function! aergia#util#Context(key) abort
+  " TODO: grab line from cursor position
   let l:line = getline('.')
   " get context around a given key(word)
   let l:ahead = matchstr(l:line, '^\zs.*\ze' . a:key)
