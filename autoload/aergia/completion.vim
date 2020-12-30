@@ -22,7 +22,7 @@ function! aergia#completion#AddItems(res, items) abort
     let l:snippet = split(fnamemodify(a:items[l:i], ':t'), '_')
     call add(a:res, {
           \ "word": l:snippet[1],
-          \ "kind": "[s]",
+          \ "kind": "[snippet]",
           \ "menu": "[" . l:snippet[0] . "]",
           \ "dup": 1,
           \ "user_data": a:items[l:i], })
@@ -34,7 +34,7 @@ endfunction
 " AergiaExpand {{{
 function! aergia#completion#AergiaExpand(item) abort
   " react if the item is really an aergia snippet
-  if empty(a:item) || get(a:item, "kind") != "[s]"
+  if empty(a:item) || get(a:item, "kind") != "[snippet]"
     return
   endif
   call aergia#Insert({"key": a:item.word, "path": a:item.user_data,})

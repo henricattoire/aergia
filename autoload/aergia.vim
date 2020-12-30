@@ -21,14 +21,15 @@ function! aergia#Snippet() abort
 
   let l:key = aergia#util#Key().base
   if !empty(l:key)
-    let l:path = globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . l:key)
+    let l:path = globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . l:key, 0, 1)
     " fall back on global snippets if necessary
     if empty(l:path)
-      let l:path = globpath(g:aergia_snippets, '**/global_' . l:key)
+      let l:path = globpath(g:aergia_snippets, '**/global_' . l:key, 0, 1)
     endif
 
-    if filereadable(l:path)
-      let l:snippet = { "key": l:key, "path": l:path, }
+    if !empty(l:path)
+      " just take the first path from the list
+      let l:snippet = { "key": l:key, "path": l:path[0], }
     endif
   endif
   return l:snippet

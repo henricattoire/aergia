@@ -2,8 +2,8 @@
 " author: Henri Cattoire.
 
 " Tag Variables {{{
-let s:opening = '<{'
-let s:closing = '}>'
+let s:opening = '<|'
+let s:closing = '|>'
 let s:pattern = s:opening . '.\{-1,}' . s:closing
   " Default
 let s:default = '+'
