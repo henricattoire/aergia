@@ -59,6 +59,13 @@ Default: 0
 Enables automatic expansion of snippets after completion when set to a truthy
 value. See |aergia-completion|.
 
+-------------------------------------------------------------------------------
+                                                               *'g:aergia_tag'*
+Default: { 'open': '<|', 'close': '|>', }
+
+Dictionary, with 'open' and 'close' as keys, that stores the delimeters |aergia|
+uses to recognise tags. Note: choosing bad delimeters could break |aergia|.
+
 ===============================================================================
 SNIPPETS                                                      *aergia-snippets*
 
