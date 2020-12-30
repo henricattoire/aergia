@@ -70,9 +70,9 @@ between tags using the same key to invoke a snippet. It is recommended to write
 your snippets using literal tabs because this makes them versatile (default).
 
 >
-    def <{name}>():
-        """ <{name}>: <{+}> """
-        <{+}>
+    def <|name|>():
+        """ <|name|>: <|+|> """
+        <|+|>
 <
 
 -------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ your snippets using literal tabs because this makes them versatile (default).
 Points in snippets where you want to insert arbitrary text. In |aergia|, normal
 tags just have a `+` between the start and the end of the tag.
 >
-    <{+}>
+    <|+|>
 <
 
 -------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ tags with that name for you. Named tags are also default tags. So if you jump to
 a named tag and then you jump again, the tag will be replaced with whatever
 default (read: name) you gave the tag.
 >
-    <{name}>
+    <|name|>
 <
 
 -------------------------------------------------------------------------------
@@ -101,11 +101,11 @@ command (read: function). They get executed when you invoke a snippet, before
 jumping to the first tag. Support for naming is limited, the name can only
 consist of alphabetical characters.
 >
-    <{`command`}> or <{`command`=name}>
+    <|`command`|> or <|`command`=name|>
 <
 Example where a command tag is used to get the active filename.
 >
-    <{`expand("%:t")`}>
+    <|`expand("%:t")`|>
 <
 
 ===============================================================================
