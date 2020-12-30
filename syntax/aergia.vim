@@ -3,6 +3,7 @@ if exists("b:current_syntax")
 endif
 
 let b:current_syntax = "aergia"
+let b:tag = '"' . get(g:aergia_tag, 'open') . '.\{-1,}' . get(g:aergia_tag, 'close') . '"'
 " highlight tags in 'aergia' files
-syntax match AergiaTag '<{.\{-1,}}>'
+execute 'syntax match AergiaTag ' . b:tag
 highlight link AergiaTag Keyword
