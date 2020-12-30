@@ -19,7 +19,7 @@ endfunction
 function! aergia#completion#AddItems(res, items) abort
   let l:i = 0
   while l:i < len(a:items)
-    let l:snippet = split(substitute(a:items[l:i], '.*/', '', ''), '_')
+    let l:snippet = split(fnamemodify(a:items[l:i], ':t'), '_')
     call add(a:res, {
           \ "word": l:snippet[1],
           \ "kind": "[s]",
