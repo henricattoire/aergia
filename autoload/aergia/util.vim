@@ -20,9 +20,28 @@ function! aergia#util#Type() abort
   return '\(' . join(split(&filetype, '\.'), '\|') . '\)'
 endfunction
 " }}}
+" PathComp {{{
+function aergia#util#PathComp(path1, path2)
+  let l:a = 0
+  let l:b = 0
+  " try to match first filetype in path
+  let l:types = split(&ft, '\.')
+  let l:i = len(l:types) - 1
+  while l:i > -1
+    let l:cur = get(l:types, i)
+    if a:path1 =~ l:cur . '/' . l:cur
+      let l:a = i
+    endif
+    if a:path2 =~ l:cur . '/' . l:cur
+      let l:b = i
+    endif
+    let l:i -= 1
+  endwhile
+  return l:a - l:b
+endfunction
+" }}}
 " Context {{{
 function! aergia#util#Context(key) abort
-  " TODO: grab line from cursor position
   let l:line = getline('.')
   " get context around a given key(word)
   let l:ahead = matchstr(l:line, '^\zs.*\ze' . a:key)
