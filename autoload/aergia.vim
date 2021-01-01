@@ -29,7 +29,7 @@ function! aergia#Snippet() abort
 
     if !empty(l:path)
       " just take the first path from the list
-      let l:snippet = { "key": l:key, "path": l:path[0], }
+      let l:snippet = { "key": l:key, "path": get(sort(l:path, 'aergia#util#PathComp'), 0), }
     endif
   endif
   return l:snippet
