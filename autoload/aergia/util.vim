@@ -11,7 +11,7 @@ function! aergia#util#Key() abort
     let l:start -= 1
   endwhile
 
-  return { "base": l:line[l:start:], "start": l:start, }
+  return { "base": escape(l:line[l:start:], '{}'), "start": l:start, }
 endfunction
 " }}}
 " Type {{{
