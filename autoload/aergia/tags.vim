@@ -53,11 +53,15 @@ endfunction
   " ProcessName {{{
 function! s:ProcessName() abort
   if exists('s:properties')
-    let l:pos = getpos('.')
-    silent! execute "%s/" . s:opening . s:properties["name"] . s:closing .  "/"
-          \ . getline(s:properties["position"][1])[s:properties["position"][2] - 1:col('.') - 1] . "/g"
+    echom "Process name: " . s:properties["name"] . ", " . s:properties["position"][1] . ":" . s:properties["position"][2]
+    let l:cpos = getpos('.')
+    echom "On: " . l:cpos[1] . ", " . l:cpos[2]
+    if l:cpos[1] == s:properties["position"][1] && l:cpos[2] >= s:properties["position"][2]
+      let l:varName = getline(s:properties["position"][1])[s:properties["position"][2] - 1:l:cpos[2] - 1]
+      silent! execute "%s/" . s:opening . s:properties["name"] . s:closing .  "/" . l:varName . "/g"
+    endif
     unlet s:properties
-    call setpos('.', l:pos)
+    call setpos('.', l:cpos)
   endif
 endfunction
   " }}}
