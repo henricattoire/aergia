@@ -149,6 +149,13 @@ Removing unused snippets is easy with AergiaRemoveSnippet.
     :AergiaRemoveSnippet snippet_na<tab>
 <
 
+-------------------------------------------------------------------------------
+                                                       *':AergiaShareSnippet'*
+Sharing a snippet with other filetypes is easy with AergiaShareSnippet.
+>
+    :AergiaShareSnippet snippet_na<tab> ft1 ft2 ...
+<
+
 ===============================================================================
 COMPLETION                                                  *aergia-completion*
 
