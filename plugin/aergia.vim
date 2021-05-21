@@ -30,6 +30,7 @@ execute "smap " . g:aergia_trigger . " <Plug>(aergia)"
 command -nargs=1 AergiaAddSnippet :call aergia#commands#AergiaAddSnippet(<f-args>)
 command -nargs=1 -complete=customlist,aergia#completion#ListSnippets AergiaEditSnippet :call aergia#commands#AergiaEditSnippet(<f-args>)
 command -nargs=1 -complete=customlist,aergia#completion#ListSnippets AergiaRemoveSnippet :call aergia#commands#AergiaRemoveSnippet(<f-args>)
+command -nargs=+ -complete=customlist,aergia#completion#ListSnippets AergiaShareSnippet :call aergia#commands#AergiaShareSnippet(<f-args>)
 " }}}
 let &cpo = s:save_cpo
 unlet s:save_cpo
