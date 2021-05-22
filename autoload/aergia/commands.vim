@@ -44,7 +44,7 @@ function! aergia#commands#AergiaShareSnippet(snippet, ...) abort
         call mkdir(l:ftroot)
       endif
       if executable('ln')
-        echom system('ln -vs ' . shellescape(l:path) . ' ' . shellescape(l:ftroot . "/" . substitute(a:snippet, ".*_", ft . "_", "")))
+        echo system('ln -vs ' . shellescape(l:path) . ' ' . shellescape(l:ftroot . "/" . substitute(a:snippet, "[^_]*_", ft . "_", "")))
       else
         echoerr "AergiaWarning: you don't have `ln` installed."
       endif
