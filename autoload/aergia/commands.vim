@@ -34,24 +34,6 @@ function! aergia#commands#AergiaRemoveSnippet(name) abort
   endif
 endfunction
 " }}}
-" AergiaShareSnippet {{{
-function! aergia#commands#AergiaShareSnippet(snippet, ...) abort
-  let l:path = s:FindFile(a:snippet)
-  if !empty(l:path)
-    for ft in a:000
-      let l:ftroot = g:aergia_snippets . "/" . ft
-      if !isdirectory(l:ftroot)
-        call mkdir(l:ftroot)
-      endif
-      if executable('ln')
-        echom system('ln -vs ' . shellescape(l:path) . ' ' . shellescape(l:ftroot . "/" . substitute(a:snippet, ".*_", ft . "_", "")))
-      else
-        echoerr "AergiaWarning: you don't have `ln` installed."
-      endif
-    endfor
-  endif
-endfunction
-" }}}
 " FindFile {{{
 function! s:FindFile(name) abort
   let l:results = globpath(g:aergia_snippets, '**/*'. a:name, 0, 1)
