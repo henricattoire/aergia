@@ -14,6 +14,11 @@ function! aergia#util#Key() abort
   return { "base": escape(l:line[l:start:], '{}'), "start": l:start, }
 endfunction
 " }}}
+" AddFt {{{
+function! aergia#util#AddFt(file) abort
+  return a:file . ".ae"
+endfunction
+" }}}
 " Type {{{
 function! aergia#util#Type() abort
   " put filetype(s) in regex format

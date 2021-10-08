@@ -11,7 +11,7 @@ function! aergia#commands#AergiaAddSnippet(name) abort
       if l:type > 1 && !isdirectory(g:aergia_snippets . "/" . l:pick)
         call mkdir(g:aergia_snippets . "/" . l:pick, "p")
       endif
-      let l:path = g:aergia_snippets . "/" . (l:type > 1 ? l:pick . "/" : "") . l:pick . '_' . fnameescape(a:name)
+      let l:path = g:aergia_snippets . "/" . (l:type > 1 ? l:pick . "/" : "") . l:pick . '_' . aergia#util#AddFt(fnameescape(a:name))
       execute "split " . l:path
     endif
   endif
@@ -36,7 +36,7 @@ endfunction
 " }}}
 " FindFile {{{
 function! s:FindFile(name) abort
-  let l:results = globpath(g:aergia_snippets, '**/*'. a:name, 0, 1)
+  let l:results = globpath(g:aergia_snippets, '**/*'. aergia#util#AddFt(a:name), 0, 1)
   if len(l:results) == 0
     echoerr "AergiaWarning: you don't have a '" . a:name . "' snippet."
     return ""

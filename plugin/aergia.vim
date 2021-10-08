@@ -11,7 +11,6 @@ set cpo&vim
 " Global Variables {{{
 let g:aergia_snippets = expand(get(g:, 'aergia_snippets', '~/.vim/snippets'))
 let g:aergia_trigger  = get(g:, 'aergia_trigger', '<c-a>')
-let g:aergia_tag = get(g:, 'aergia_tag', { 'open': '<|', 'close': '|>' })
 
 if get(g:, 'aergia_expand', 0)
   augroup aergia_expand
