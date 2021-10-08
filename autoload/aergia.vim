@@ -21,10 +21,10 @@ function! aergia#Snippet() abort
 
   let l:key = aergia#util#Key().base
   if !empty(l:key)
-    let l:path = globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . l:key, 0, 1)
+    let l:path = globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . aergia#util#AddFt(l:key), 0, 1)
     " fall back on global snippets if necessary
     if empty(l:path)
-      let l:path = globpath(g:aergia_snippets, '**/global_' . l:key, 0, 1)
+      let l:path = globpath(g:aergia_snippets, '**/global_' . aergia#util#AddFt(l:key), 0, 1)
     endif
 
     if !empty(l:path)

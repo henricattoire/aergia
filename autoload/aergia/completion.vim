@@ -19,7 +19,7 @@ endfunction
 function! aergia#completion#AddItems(res, items) abort
   let l:i = 0
   while l:i < len(a:items)
-    let l:snippet = split(fnamemodify(a:items[l:i], ':t'), '_')
+    let l:snippet = split(fnamemodify(a:items[l:i], ':t:r'), '_')
     call add(a:res, {
           \ "word": l:snippet[1],
           \ "kind": "[snippet]",
@@ -46,6 +46,6 @@ endfunction
 function! aergia#completion#ListSnippets(arg, line, pos) abort
   return map(filter(
         \ globpath(g:aergia_snippets, '**/*' . a:arg . (empty(a:arg) ? '' : '*'), 0, 1),
-        \ "filereadable(v:val)"), "fnamemodify(v:val, ':t')")
+        \ "filereadable(v:val)"), "fnamemodify(v:val, ':t:r')")
 endfunction
 " }}}
