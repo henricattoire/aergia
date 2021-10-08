@@ -64,10 +64,11 @@ SNIPPETS                                                      *aergia-snippets*
 
 -------------------------------------------------------------------------------
                                                              *'snippet_format'*
-Each snippet has its own file. The text used to invoke the snippet is the same
-as the filename. Snippets can (but don't have to) contain tags and you can jump
-between tags using the same key to invoke a snippet. It is recommended to write
-your snippets using literal tabs because this makes them versatile (default).
+Each snippet has its own file recognisable by the `ae` extension. The text used
+to invoke the snippet is the same as the filename. Snippets can (but don't have
+to) contain tags and you can jump between tags using the same key to invoke a
+snippet. It is recommended to write your snippets using literal tabs because this
+makes them versatile (default).
 
 >
     def <|name|>():
