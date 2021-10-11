@@ -4,7 +4,5 @@ endif
 
 let b:current_syntax = "aergia"
 " highlight tags in 'aergia' files
-syntax match AergiaTag "<|+|>"
+syntax match AergiaTag "<|.\{-1,}|>"
 highlight link AergiaTag Keyword
-syntax match AergiaSpecialTag "<|.\{-1,}|>"
-highlight link AergiaSpecialTag Special
