@@ -69,11 +69,33 @@ to invoke the snippet is the same as the filename. Snippets can (but don't have
 to) contain tags and you can jump between tags using the same key to invoke a
 snippet. It is recommended to write your snippets using literal tabs because this
 makes them versatile (default).
-
 >
     def <|name|>():
         """ <|name|>: <|+|> """
         <|+|>
+<
+
+Managing snippets is easier with |aergia-commands| but you can also do it manually
+if you want. Each filetype (but global) has a child(directory) to |g:aergia_snippets|
+where snippets for that filetype are stored. Each snippet file follows in turn
+this naming convention.
+>
+    {filetype}_{key}.ae
+<
+
+Example of an arbitrary snippet directory structure.
+>
+    $HOME/.vim/snippets
+    ├── c
+    │   ├── c_for.ae
+    │   ├── c_if.ae
+    │   ├── c_ife.ae
+    │   └── c_inc.ae
+    ├── python
+    │   ├── python_for.ae
+    │   ├── python_imp.ae
+    │   └── python_cl.ae
+    └── global_adr
 <
 
 -------------------------------------------------------------------------------

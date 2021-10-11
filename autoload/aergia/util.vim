@@ -14,9 +14,14 @@ function! aergia#util#Key() abort
   return { "base": escape(l:line[l:start:], '{}'), "start": l:start, }
 endfunction
 " }}}
+" GetFt {{{
+function! aergia#util#GetFt() abort
+  return ".ae"
+endfunction
+" }}}
 " AddFt {{{
 function! aergia#util#AddFt(file) abort
-  return a:file . ".ae"
+  return a:file . aergia#util#GetFt()
 endfunction
 " }}}
 " Type {{{
