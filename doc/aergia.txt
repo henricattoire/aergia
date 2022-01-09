@@ -95,7 +95,7 @@ Example of an arbitrary snippet directory structure.
     │   ├── python_for.ae
     │   ├── python_imp.ae
     │   └── python_cl.ae
-    └── global_adr
+    └── global_adr.ae
 <
 
 -------------------------------------------------------------------------------
