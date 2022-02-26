@@ -78,20 +78,19 @@ to write your snippets using literal tabs because this makes them more versatile
         "def <|name|>():"
         "\t''' <|name|>: <|+|> '''",
         "\t<|+|>"
-      ]
-    }
-<
-
-Every json (read: snippet) file needs to be formatted like this.
->
-    {
-      key: [
-        line,
-        line,
-        ...
       ],
       ...
     }
+<
+
+Each snippet is defined by a key. This key has one value; the body of the snippet.
+The body of the snippet is just a list where each item is one line of the expanded
+snippet (in order).
+>
+key: [
+  line,
+  ....
+]
 <
 
 -------------------------------------------------------------------------------
@@ -130,18 +129,18 @@ Example where a command tag is used to get the active filename.
 -------------------------------------------------------------------------------
                                                *'snippet_special_command_tags'*
 Special command tags work just like command tags but their execution is delayed
-until the tag with the given name was expanded. Now, every `@` symbol in the
-command tag gets replaced by the expansion of the named tag.
+until the tag with the given name was expanded. Every `@` in the command tag 
+gets replaced by the expansion of the named tag.
 >
     <|`command`:name|>
 <
-Example a special tag is used to get the extension of the value expanded by the
-`file` named tag.
+Example where a special command tag is used to get the extension of the value 
+expanded by the `file` named tag.
 >
-    <|`fnamemodify(@, ':e')`:file|>
+    <|`fnamemodify('@', ':e')`:file|>
 <
-It is still possible to use a regular `@` symbol inside the tag by simply escaping
-the symbol.
+Note: if you want to include a literal `at sign` in the special command tag,
+you need to escape it.
 
 ===============================================================================
 COMPLETION                                                  *aergia-completion*
