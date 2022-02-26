@@ -12,9 +12,8 @@ Author:  Henri Cattoire
 2. Requirements |aergia-requirements|
 3. Variables    |aergia-variables|
 4. Snippets     |aergia-snippets|
-5. Commands     |aergia-commands|
-6. Completion   |aergia-completion|
-7. Integration  |aergia-integration|
+5. Completion   |aergia-completion|
+6. Integration  |aergia-integration|
 
 ===============================================================================
 INTRODUCTION                                              *aergia-introduction*
@@ -44,6 +43,12 @@ special characters (like ~) and environment variables get expanded.
 <
 
 -------------------------------------------------------------------------------
+                                                             *'g:aergia_cache'*
+Default: 1
+
+Let |aergia| cache snippet files to reuse in the future.
+
+-------------------------------------------------------------------------------
                                                            *'g:aergia_trigger'*
 Default: '<c-a>'
 
@@ -64,38 +69,29 @@ SNIPPETS                                                      *aergia-snippets*
 
 -------------------------------------------------------------------------------
                                                              *'snippet_format'*
-Each snippet has its own file recognisable by the `ae` extension. The text used
-to invoke the snippet is the same as the filename. Snippets can (but don't have
-to) contain tags and you can jump between tags using the same key to invoke a
-snippet. It is recommended to write your snippets using literal tabs because this
-makes them versatile (default).
+Each filetype has its own json file where snippets get defined. The filename is
+simply the filetype (or global) followed by the json extension. It is recommended
+to write your snippets using literal tabs because this makes them more versatile.
 >
-    def <|name|>():
-        """ <|name|>: <|+|> """
-        <|+|>
+    {
+      "def": [
+        "def <|name|>():"
+        "\t''' <|name|>: <|+|> '''",
+        "\t<|+|>"
+      ]
+    }
 <
 
-Managing snippets is easier with |aergia-commands| but you can also do it manually
-if you want. Each filetype (but global) has a child(directory) to |g:aergia_snippets|
-where snippets for that filetype are stored. Each snippet file follows in turn
-this naming convention.
+Every json (read: snippet) file needs to be formatted like this.
 >
-    {filetype}_{key}.ae
-<
-
-Example of an arbitrary snippet directory structure.
->
-    $HOME/.vim/snippets
-    ├── c
-    │   ├── c_for.ae
-    │   ├── c_if.ae
-    │   ├── c_ife.ae
-    │   └── c_inc.ae
-    ├── python
-    │   ├── python_for.ae
-    │   ├── python_imp.ae
-    │   └── python_cl.ae
-    └── global_adr
+    {
+      key: [
+        line,
+        line,
+        ...
+      ],
+      ...
+    }
 <
 
 -------------------------------------------------------------------------------
@@ -131,39 +127,21 @@ Example where a command tag is used to get the active filename.
     <|`expand("%:t")`|>
 <
 
-===============================================================================
-COMMANDS                                                      *aergia-commands*
-
 -------------------------------------------------------------------------------
-                                                       *'aergia-commands-info'*
-With the use of user commands, |aergia| provides a clean way to manage snippets.
-Some commands also provide tab completion using the snippets already present on
-your system and are indicated with <tab>.
-
--------------------------------------------------------------------------------
-                                                          *':AergiaAddSnippet'*
-This command allows you to interactively add snippets to |aergia| without having
-to leave vim. The snippet can be specific to the filetype of the file you're
-currently working in, or you can choose to make it a global snippet.
+                                               *'snippet_special_command_tags'*
+Special command tags work just like command tags but their execution is delayed
+until the tag with the given name was expanded. Now, every `@` symbol in the
+command tag gets replaced by the expansion of the named tag.
 >
-    :AergiaAddSnippet snippet_name
+    <|`command`:name|>
 <
-
--------------------------------------------------------------------------------
-                                                         *':AergiaEditSnippet'*
-So you've added a new snippet using AergiaAddSnippet but it doesn't work and
-now you want to quickfix it. This command allows you to interactively change
-a snippet without leaving vim.
+Example a special tag is used to get the extension of the value expanded by the
+`file` named tag.
 >
-    :AergiaEditSnippet snippet_na<tab>
+    <|`fnamemodify(@, ':e')`:file|>
 <
-
--------------------------------------------------------------------------------
-                                                       *':AergiaRemoveSnippet'*
-Removing unused snippets is easy with AergiaRemoveSnippet.
->
-    :AergiaRemoveSnippet snippet_na<tab>
-<
+It is still possible to use a regular `@` symbol inside the tag by simply escaping
+the symbol.
 
 ===============================================================================
 COMPLETION                                                  *aergia-completion*
@@ -179,14 +157,14 @@ on how to use the provided function.
 Fitting the `vim` completion philosophy, you could create a distinct mapping to
 trigger snippet completion.
 >
-    inoremap <c-x><c-a> <c-r>=aergia#completion#AergiaComplete()<cr>
+    inoremap <c-x><c-a> <c-r>=aergia#complete#AergiaComplete()<cr>
 <
 
 You can also tap into completion plugins that have support for custom completion
 functions, like MUcomplete.
 >
     let g:mucomplete#user_mappings = {
-          \ 'aergia' : "\<c-r>=aergia#completion#AergiaComplete()\<cr>", }
+          \ 'aergia' : "\<c-r>=aergia#complete#AergiaComplete()\<cr>", }
     let g:mucomplete#chains = {
           \ 'default' : [ 'aergia', 'path', 'omni', 'keyn', 'dict' ], }
 <
@@ -205,16 +183,16 @@ INTEGRATION                                                *aergia-integration*
 To integrate well with other plugins that use the same mapping in insert mode as
 |aergia|, there is a function you can use to check if |aergia| can be useful.
 
-Useful returns a boolean that indicates whether |aergia| is able to jump to a
+Callable returns a boolean that indicates whether |aergia| is able to jump to a
 tag or can expand the current key as a snippet.
 >
-    call aergia#Useful()
+    call aergia#Callable()
 <
 
 Use the tab key for both MUcomplete (with automatic completion) and |aergia|.
 >
     imap <c-f> <plug>(MUcompleteFwd)
     imap <expr> <tab> pumvisible() ? "\<c-f>" :
-          \ aergia#Useful() ? "\<c-a>" :  "\<tab>"
+          \ aergia#Callable() ? "\<c-a>" :  "\<tab>"
     smap <tab> <c-a>
 <
