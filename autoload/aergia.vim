@@ -29,7 +29,7 @@ function! aergia#GetKey() abort
   let l:start = col('.') - 1
   let l:line = getline('.')[:l:start]
 
-  while l:start > 0 && l:line[l:start - 1] =~ '[#!A-Za-z0-9_]'
+  while l:start > 0 && l:line[l:start - 1] !~ '\s'
     let l:start -= 1
   endwhile
 
