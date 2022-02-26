@@ -8,7 +8,6 @@
 key features of a snippet manager.
   * Global and filetype specific snippets
   * Jumping between different types of tags inside a snippet
-  * Managing snippets with custom commands
 
 ---
 For more information, see [the documentation](doc/aergia.txt).
