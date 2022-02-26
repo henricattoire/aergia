@@ -1,55 +1,87 @@
-" aergia (v.1.2): transform keys into snippets.
+" aergia (v.1.3): insert snippets.
 " author: Henri Cattoire.
 
-" Useful {{{
-function! aergia#Useful() abort
-  return aergia#tags#CanJump() || !empty(aergia#Snippet())
+" Callable {{{
+"
+" Return if it would be useful to call aergia.
+function! aergia#Callable() abort
+  return aergia#tags#NextTag() || !empty(aergia#snippets#Get(aergia#GetKey().key))
 endfunction
 " }}}
-" Respond {{{
-function! aergia#Respond() abort
-  let l:snippet = aergia#Snippet()
-  if !empty(l:snippet)
-    call aergia#Insert(l:snippet)
+" ExpandOrJump {{{
+"
+" Expand key under the cursor, jump to the next tag
+" or do nothing.
+function! aergia#ExpandOrJump() abort
+  let l:key = aergia#GetKey().key
+  let l:snippet = aergia#snippets#Get(key)
+  if !empty(l:snippet) " expand
+    call aergia#InsertSnippet(l:key, copy(l:snippet))
   endif
   call aergia#tags#Jump()
 endfunction
 " }}}
-" Snippet {{{
-function! aergia#Snippet() abort
-  let l:snippet = {}
+" GetKey {{{
+"
+" Get a key starting at the cursor and moving backwards; Returns
+" a dictionary containing the key and where it starts on the line.
+function! aergia#GetKey() abort
+  let l:start = col('.') - 1
+  let l:line = getline('.')[:l:start]
 
-  let l:key = aergia#util#Key().base
-  if !empty(l:key)
-    let l:path = globpath(g:aergia_snippets, '**/' . aergia#util#Type() . '[_]' . aergia#util#AddFt(l:key), 0, 1)
-    " fall back on global snippets if necessary
-    if empty(l:path)
-      let l:path = globpath(g:aergia_snippets, '**/global_' . aergia#util#AddFt(l:key), 0, 1)
-    endif
+  while l:start > 0 && l:line[l:start - 1] =~ '[#!A-Za-z0-9_]'
+    let l:start -= 1
+  endwhile
 
-    if !empty(l:path)
-      " just take the first path from the list
-      let l:snippet = { "key": l:key, "path": get(sort(l:path, 'aergia#util#PathComp'), 0), }
-    endif
-  endif
-  return l:snippet
+  return { "key": l:line[l:start:], "starts_at": l:start, }
 endfunction
 " }}}
-" Insert {{{
-function! aergia#Insert(snippet) abort
-  let l:context = aergia#util#Context(a:snippet.key)
-  " get content of snippet and remove key
-  let l:content = map(readfile(a:snippet.path), function('aergia#util#Indent', [ l:context.ahead[0] ]))
-  execute "normal! " . len(a:snippet.key) . "h" . len(a:snippet.key) . '"_x'
-
-  if l:context.ahead[0]
-    let l:content[0] = l:context.ahead[1] . l:content[0]
+" InsertSnippet {{{
+"
+" Insert the snippet under the cursor (preserving context and
+" indentation rules set by buffer) and delete the key.
+function! aergia#InsertSnippet(key, snippet) abort
+  let l:context = s:ContextAroundKey(a:key)
+  " add context before key if it is not empty and indent snippet where needed
+  if l:context[0] !~ '^\s\+$\|^$' " before key
+    let l:lines = [ l:context[0] . a:snippet[0] ] + map(a:snippet[1:], function('s:Indent'))
+  else
+    let l:lines = map(a:snippet, function('s:Indent'))
   endif
-  if l:context.after[0]
-    let l:content[-1] = l:content[-1] . l:context.after[1]
+  " add context after key if it is not empty
+  if l:context[1] !~ '^\s\+$\|^$' " after key
+    let l:lines[-1] = l:lines[-1] . l:context[1]
   endif
-  call setline(line('.'), l:content[0])
-  call append(line('.'), l:content[1:])
-  call aergia#tags#ProcessCommands()
+  " delete key
+  execute "normal! " . len(a:key) . "h" . len(a:key) . '"_x'
+  " insert snippet
+  call setline(line('.'), l:lines[0])
+  call append(line('.'), l:lines[1:])
+  let l:pos = getpos('.')
+  call aergia#tags#command#Process()
+  call setpos('.', l:pos)
+endfunction
+" }}}
+" s:ContextAroundKey {{{
+"
+" Get context before and after key on the current line; Returns
+" a list with two items: context before (i:0) and after (i:1) key.
+function! s:ContextAroundKey(key) abort
+  let l:line = getline('.')
+  return [
+        \ matchstr(l:line, '^\zs.*\ze' . a:key),
+        \ matchstr(l:line, '^.*' . a:key . '\zs.*\ze$')
+        \ ]
+endfunction
+" }}}
+" s:Indent {{{
+"
+" Indent the provided line and expand tabs if needed.
+function! s:Indent(_, line) abort
+  let l:indented = repeat("\t", indent('.') / (&expandtab ? &shiftwidth : &tabstop)) . a:line
+  if &expandtab
+    let l:indented = substitute(l:indented, "\t", repeat(' ', &shiftwidth), 'g')
+  endif
+  return l:indented
 endfunction
 " }}}
