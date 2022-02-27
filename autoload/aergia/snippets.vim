@@ -23,7 +23,7 @@ endfunction
 function! aergia#snippets#GetAll(filter) abort
   let l:snippets = {}
   for l:ft in split(&filetype, '\.') + [ "global" ]
-    let l:snippets[ft] = filter(s:GetSnippets(l:ft), 'v:key =~ "' . a:filter . '"')
+    let l:snippets[l:ft] = filter(s:GetSnippets(l:ft), 'v:key =~ "' . a:filter . '"')
   endfor
   return l:snippets
 endfunction

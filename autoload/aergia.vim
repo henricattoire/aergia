@@ -14,7 +14,7 @@ endfunction
 " or do nothing.
 function! aergia#ExpandOrJump() abort
   let l:key = aergia#GetKey().key
-  let l:snippet = aergia#snippets#Get(key)
+  let l:snippet = aergia#snippets#Get(l:key)
   if !empty(l:snippet) " expand
     call aergia#InsertSnippet(l:key, copy(l:snippet))
   endif
