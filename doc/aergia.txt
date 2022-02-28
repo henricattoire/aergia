@@ -27,7 +27,7 @@ one feature I really wanted to have.
 REQUIREMENTS                                              *aergia-requirements*
 
 Vim 8.0 or higher is recommended, as this was the version used to develop and
-test |aergia| (but |aergia| should work from version 7.01).
+test |aergia| (but |aergia| should work from version 7.4).
 
 ===============================================================================
 VARIABLES                                                    *aergia-variables*
