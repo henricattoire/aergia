@@ -116,8 +116,7 @@ default (read: name) you gave the tag.
                                                        *'snippet_command_tags'*
 Command tags are special because they get replaced by the return value of a
 command (read: function). They get executed when you invoke a snippet, before
-jumping to the first tag. Support for naming is limited, the name can only
-consist of alphabetical characters.
+jumping to the first tag.
 >
     <|`command`|> or <|`command`=name|>
 <
@@ -129,12 +128,12 @@ Example where a command tag is used to get the active filename.
 -------------------------------------------------------------------------------
                                                *'snippet_special_command_tags'*
 Special command tags work just like command tags but their execution is delayed
-until the tag with the given name was expanded. Every `@` in the command tag 
+until the tag with the given name was expanded. Every `@` in the command tag
 gets replaced by the expansion of the named tag.
 >
     <|`command`:name|>
 <
-Example where a special command tag is used to get the extension of the value 
+Example where a special command tag is used to get the extension of the value
 expanded by the `file` named tag.
 >
     <|`fnamemodify('@', ':e')`:file|>

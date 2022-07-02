@@ -22,8 +22,12 @@ function! s:CreateCompletionItems(dict) abort
             \ "word": l:key,
             \ "kind": "[snippet]",
             \ "menu": "[" . l:ft . "]",
-            \ "dup": 1,
-            \ "user_data": join(a:dict[l:ft][l:key], "\n"), })
+            \ "dup": 1, })
+            " Note: storing the snippet as user_data
+            "       introduced annoying bugs in the
+            "       (auto)expand option and is not much
+            "       faster because caching already
+            "       happens in the snippets module.
     endfor
   endfor
   return l:items
@@ -36,7 +40,6 @@ function! aergia#complete#ExpandCompletedItem(item) abort
   if empty(a:item) || a:item.kind != "[snippet]"
     return
   endif
-  call aergia#InsertSnippet(a:item.word, split(a:item.user_data, "\n"))
   execute 'call feedkeys("\' . g:aergia_trigger . '")'
 endfunction
 " }}}
