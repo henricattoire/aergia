@@ -1,0 +1,21 @@
+{
+  "ing": [
+    "#ifndef <|`substitute(substitute(expand('%:t'), '.', '\\U&', 'g'), '\\.', '_', '')`=guard|>",
+    "#define <|guard|>",
+    "<|+|>",
+    "#endif /* <|guard|> */"
+  ],
+  "def": [
+    "def <|name|>(<|`indent('.') ? 'self, ' : ''`|><|args|>):",
+    "\t'''",
+    "\t<|name|>: <|+|>",
+    "\tArgs:",
+    "\t<|`join(split('@', ', '), \"\\t<|+|>\\n\") . \"\\t<|+|>\"`:args|>",
+    "\t'''",
+    "\t<|+|>"
+  ],
+  "file": [
+    "<|`expand('%:t')`=file|>",
+    "<|`'\\@ ' . fnamemodify('@', ':e')`:file|>"
+  ]
+}
