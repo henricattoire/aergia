@@ -6,7 +6,7 @@ let s:tag = aergia#tags#GetTagInformation()
 " Process {{{
 "
 " Process the current named tag.
-function!  aergia#tags#named#Process()
+function! aergia#tags#named#Process()
   if !empty(s:stored)
     let l:pos = getpos('.')
     if l:pos[1] == s:stored.position[1] && l:pos[2] >= s:stored.position[2]

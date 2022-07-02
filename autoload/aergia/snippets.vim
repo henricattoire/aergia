@@ -19,11 +19,12 @@ endfunction
 " GetAll {{{
 "
 " Get all snippets matching the provided filter (just a [partial]
-" string) and group them per filetype in a dictionary.
+" key) and group them per filetype in a dictionary. It will match
+" keys that begin with the filter.
 function! aergia#snippets#GetAll(filter) abort
   let l:snippets = {}
   for l:ft in split(&filetype, '\.') + [ "global" ]
-    let l:snippets[l:ft] = filter(s:GetSnippets(l:ft), 'v:key =~ "' . a:filter . '"')
+    let l:snippets[l:ft] = filter(s:GetSnippets(l:ft), 'v:key =~ "^' . a:filter . '"')
   endfor
   return l:snippets
 endfunction

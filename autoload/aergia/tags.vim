@@ -28,10 +28,10 @@ function! aergia#tags#Jump() abort
     if l:body !=? s:tag.dbody
       let l:pos = getpos('.')
       call aergia#tags#named#Store(l:body)
-      call aergia#tags#ProcessTag("normal! a" . l:body , "normal! i" . l:body)
+      call aergia#tags#ProcessTag("normal! a" . l:body , "normal! i" . l:body, s:tag.regex)
       execute "normal! " . l:pos[2] . "|v" . col('.') . "|\<c-g>"
     else
-      call aergia#tags#ProcessTag("startinsert!", "startinsert")
+      call aergia#tags#ProcessTag("startinsert!", "startinsert", s:tag.regex)
     endif
   endif
 endfunction
@@ -40,9 +40,9 @@ endfunction
 "
 " Process tag at the current position by removing it and entering
 " insert mode (using insert or append).
-function! aergia#tags#ProcessTag(append, insert) abort
+function! aergia#tags#ProcessTag(append, insert, regex) abort
   let [l:line, l:col] = [getline('.'), col('.')]
-  let l:without_tag = (l:col != 1 ? l:line[0:l:col - 2] : '') . substitute(l:line[l:col - 1:], s:tag.regex, '', '')
+  let l:without_tag = (l:col != 1 ? l:line[0:l:col - 2] : '') . substitute(l:line[l:col - 1:], a:regex, '', '')
   call setline(line('.'), l:without_tag)
   " append when cursor is now at the end of the line
   execute (l:without_tag[col('.') - 1:] =~ '^\s*$' ? a:append : a:insert)
